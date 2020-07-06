@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  hssys_dbase:
+    image: postgres
+    container_name: hssys
+    ports:
+      - "${PGPORT}:5432"
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_DB: hssys_db
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+
+    networks:
+      - hssys-net
+
+
+networks:
+  hssys-net:
+    name: hssystem-net
+

@@ -1,0 +1,41 @@
+;; /deps.edn
+{:paths ["tools"]
+
+ :deps {org.clojure/clojure {:mvn/version "1.10.1"}}
+
+ :aliases {:backclj {:extra-paths ["app/src"]
+                     :extra-deps
+                     {ring {:mvn/version "1.7.1"}
+                      ring/ring-defaults {:mvn/version "0.3.2"}
+                      http-kit {:mvn/version "2.3.0"}
+                      matcho {:git/url "https://github.com/HealthSamurai/matcho.git"
+                              :sha "5e44139038b53b6d05a186d8cd05819a96b0aab5"}
+                      cheshire {:mvn/version "5.9.0"}
+                      clj-http {:mvn/version "3.10.0"}
+                      clj-postgresql {:mvn/version "0.7.0"}
+                      compojure {:mvn/version "1.6.1"}
+                      route-map {:mvn/version "0.0.7-RC4"}
+                      mount {:mvn/version "0.1.12"}
+                      org.clojure/java.jdbc {:mvn/version "0.7.10"}
+                      hikari-cp {:mvn/version "2.9.0"}
+                      org.postgresql/postgresql {:mvn/version "42.2.8.jre7"}
+                      clj-yaml {:mvn/version "0.4.0"}
+                      hiccup {:mvn/version "1.0.5"}
+                      garden {:mvn/version "1.3.9"}}}
+
+           :frontclj {:extra-paths ["ui/srcs"]
+                      :extra-deps
+                      {hiccup {:mvn/version "1.0.5"}
+                       garden {:mvn/version "1.3.9"}
+                       route-map {:mvn/version "0.0.7-RC4"}
+                       }}
+
+           :dev {:extra-paths ["ui/srcs"]
+                 :extra-deps
+                 {org.clojure/tools.cli {:mvn/version "0.4.2"}
+                  nrepl/nrepl {:mvn/version "0.6.0"}
+                  refactor-nrepl {:mvn/version "2.4.0"}
+                  cider/cider-nrepl {:mvn/version "0.22.4"}}}
+
+           :figwheel {:extra-deps
+                      {com.bhauman/figwheel-main {:mvn/version "0.2.3"}}}}}

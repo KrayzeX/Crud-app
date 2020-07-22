@@ -1,0 +1,13 @@
+^{:watch-dirs ["ui/srcs" "ui/env"]
+  :css-dirs ["ui/resources/public/css"]
+  :ring-server-options {:port 3030}
+  :reload-clj-files false}
+
+{:main "dev.start"
+ :output-to "ui/resources/public/js/ui.js"
+ :output-dir "ui/resources/public/js/out"
+ :source-map true
+ :optimizations :none
+ :pretty-print true
+ :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}
+ :preloads [re-frisk.preload]}

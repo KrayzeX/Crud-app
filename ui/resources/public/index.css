@@ -1,0 +1,19 @@
+.search-icon {width: 20px;
+              height: 20px;
+              background-repeat: no-repeat;
+              background-image: url(/search.svg);}
+
+.male-icon {width: 20px;
+            height: 20px;
+            background-repeat: no-repeat;
+            background-image: url(/trash.svg);}
+
+.female-icon {width: 20px;
+              height: 20px;
+              background-repeat: no-repeat;
+              background-image: url(/trash.svg);}
+
+.trash-icon {width: 20px;
+             height: 20px;
+             background-repeat: no-repeat;
+             background-image: url(/trash.svg);}

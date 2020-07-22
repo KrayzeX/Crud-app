@@ -23,7 +23,7 @@ start:
 				clj -A:backclj:dev -m "start"
 
 figwheel:
-				clj -A:frontljs:figwheel -m "figwheel.main" -b "dev"
+				clj -A:frontclj:figwheel -m "figwheel.main" -b "dev"
 
 test:
 				clj -A:test:runner

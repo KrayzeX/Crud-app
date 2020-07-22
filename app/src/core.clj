@@ -8,15 +8,9 @@
             [dbcore :refer :all]
             [crud :as crud]))
 
-(defn home [request]
-  {:body "Home page"
-   :status 200
-   :headers {"Content-Type" "text/html"}})
-
 
 (def routes
-  {:GET home
-   "patient" {:GET crud/patient-list
+  {"patient" {"search" {:GET crud/patient-list}
               "new" {:GET crud/patient-create}
               [:pid] {:GET crud/patient-read
                       :POST crud/patient-update}}})

@@ -2,8 +2,13 @@
   (:require [clojure.string :as str]
             [org.httpkit.server :as server]
             [clojure.pprint :as pp]
+
             [ring.middleware.reload :refer [wrap-reload]]
+            [ring.middleware.cors   :refer [wrap-cors]]
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.json   :refer [wrap-json-response wrap-json-body]]
             [ring.adapter.jetty :as jetty]
+
             [route-map.core :as rm]
             [dbcore :refer :all]
             [crud :as crud]))
@@ -22,13 +27,19 @@
     {:status 404 :body "404: page not found!"}))
 
 
+(def app
+  (-> dispatch
+
+      wrap-json-body
+      wrap-params
+      wrap-json-response
+      wrap-reload
+      ))
+
+
 (defn -main [& args]
-  (server/run-server #'dispatch {:port 8080 :join? false})
+  (server/run-server #'app {:port 8080 :join? false})
   (println "WebApp started at port: 8080..."))
 
 (comment
-
-  (jetty/run-jetty #'dispatch {:port 8080 :join? false})
-
-
-  )
+  (jetty/run-jetty #'dispatch {:port 8080 :join? false}))

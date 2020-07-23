@@ -4,13 +4,13 @@
    [clojure.string :as str]))
 
 (defn patient-list [request]
-  (let [data (db/query "select resource from patient")]
+  (let [data (db/query ["select * from patient"])]
     {:status 200
      :body data}))
 
 (defn patient-read [request]
   (let [pid (:params request)
-        data (db/query "select * from patient where id = ?" pid)]
+        data (db/query ["select * from patient where id = ?" pid])]
     {:status 200
      :body data}))
 

@@ -12,14 +12,15 @@
      (= :deint phase)
      {}
      (or (= :params phase) (= :init phase))
-     {:xhr/fetch {:uri "/patient/search"
-                  :params {:search-query (if (get-in params [:params :q])
-                                           (str/replace (get-in params [:params :q]) #" " "%20")
-                                           "%20")}
-                  :req-id ::patient-list}})))
+     {:http-xhrio {:method :get
+                   :uri "http://localhost:8080/patient/search"
+                   :format (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success [::patient-list]
+                   :on-failure []}
+      :db (assoc db :loading? true)})))
 
 (rf/reg-sub
  :patient/index
- :<- [:xhr/response ::patients-search]
  (fn [{data :data}]
    ))

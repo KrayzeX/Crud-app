@@ -12,15 +12,18 @@
      (= :deint phase)
      {}
      (or (= :params phase) (= :init phase))
-     {:http-xhrio {:method :get
-                   :uri "http://localhost:8080/patient/search"
-                   :format (ajax/json-request-format)
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success [::patient-list]
-                   :on-failure []}
+     {:xhr/fetch {:uri "http://localhost:8080/patient/search"
+                  :req-id ::patient-list}
       :db (assoc db :loading? true)})))
 
 (rf/reg-sub
  :patient/index
+ :<- [:xhr/response ::patient-list]
  (fn [{data :data}]
-   ))
+   (:entry data)))
+
+
+
+(rf/reg-event-fx
+ :patient/show
+ (fn [{db :db} [pid phase params]]))

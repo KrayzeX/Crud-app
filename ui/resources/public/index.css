@@ -3,17 +3,23 @@
               background-repeat: no-repeat;
               background-image: url(/search.svg);}
 
-.male-icon {width: 20px;
-            height: 20px;
-            background-repeat: no-repeat;
-            background-image: url(/trash.svg);}
+.male-icon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-image: url("/person.svg");
+}
 
-.female-icon {width: 20px;
-              height: 20px;
-              background-repeat: no-repeat;
-              background-image: url(/trash.svg);}
+.female-icon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-image: url(/woman.svg);
+}
 
-.trash-icon {width: 20px;
-             height: 20px;
-             background-repeat: no-repeat;
-             background-image: url(/trash.svg);}
+.delete-icon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-image: url(/trash.svg);
+}

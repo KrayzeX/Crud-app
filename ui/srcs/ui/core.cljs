@@ -49,7 +49,6 @@
    [current-page]
    (js/document.getElementById "ui")))
 
-
 (defn init! []
   (rf/dispatch-sync [::initialize])
   (mount-root))

@@ -39,7 +39,24 @@
                 :border "1px solid #70AE60"}
       [:&:hover {:cursor "pointer"
                  :background-color "#B4F3A4"}]
-      [:&:active {:background-color "#7ACB7A"}]]]]))
+      [:&:active {:background-color "#7ACB7A"}]]]
+
+    [:.table {:margin-top "30px"}
+     [:.line-info {:display "flex"
+                   :box-sizing "border-box"
+                   :border "1px solid grey"
+                   :border-radius "10px"}
+      [:.icon {:margin-right "150px"
+               :width "20px"
+               :height "20px"}]
+      [:.patient-info {:margin-right "100px"}
+       [:.main-info {:font-size "20px"
+                     :font-weight "bold"}]
+       [:.second-info {:display "flex"
+                       :color "#666666"}
+        [:.birth {:margin-right "15px"}]
+        [:.policy-number]]]
+      [:.delete ]]]]))
 
 (defn tittle []
   [:div.tittle style
@@ -58,16 +75,41 @@
     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
     "Create +"]])
 
-(defn patient-list [m]
-  )
+(defn part [{{resource :resource} :resource :as args}]
+  (println (:gender resource))
+  [:div.line-info ^{:key (str (:patient_id resource))}
+   [:div.icon
+    (if (= (:gender resource) "male")
+      [:div.male-icon]
+      [:div.female-icon])]
+   [:div.patient-info
+    [:div.main-info
+     (let [firstname (get-in resource [:name :first-name])
+           family (get-in resource [:name :surname])
+           middlename (get-in resource [:name :middle-name])]
+       (str family " " firstname " " middlename))]
+    [:div.second-info
+     [:div.birth
+      (str "Birth date: " (:birth-date resource))]
+     [:div.policy-number
+      (str "Policy number: " (:policy-number resource))]]]
+   [:div.delete
+    [:div.delete-icon]]])
+
+(defn patient-list [data]
+  [:div.table
+   (map
+    part
+    data)])
 
 (defn patients [data]
-  (let [m (rf/subscribe [:patient/index])]
-    [:div.page
-     [tittle]
-     [page-line]
-     [:div.main
-      [actions]
-      [patient-list]]]))
+  (let [m @(rf/subscribe [:patient/index])]
+    (fn []
+      [:div.page
+       [tittle]
+       [page-line]
+       [:div.main
+        [actions]
+        [patient-list m]]])))
 
 (pages/reg-page :patient/index patients)

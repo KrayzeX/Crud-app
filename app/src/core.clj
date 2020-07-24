@@ -26,15 +26,18 @@
     (handler (assoc req :route-params params))
     {:status 404 :body "404: page not found!"}))
 
+(defn allow-handler [handler]
+  (wrap-cors handler :access-control-allow-origin #".*"
+             :access-control-allow-methods [:get :post :put :delete]))
+
 
 (def app
   (-> dispatch
-
+      allow-handler
       wrap-json-body
       wrap-params
       wrap-json-response
-      wrap-reload
-      ))
+      wrap-reload))
 
 
 (defn -main [& args]

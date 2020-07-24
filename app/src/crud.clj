@@ -6,7 +6,7 @@
 (defn patient-list [request]
   (let [data (db/query ["select * from patient"])]
     {:status 200
-     :body data}))
+     :body {:entry data}}))
 
 (defn patient-read [request]
   (let [pid (:params request)

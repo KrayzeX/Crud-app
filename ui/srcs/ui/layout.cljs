@@ -7,9 +7,9 @@
 
 (def layout-style
   (styles/style
-   [:.layout {:margin "40px 400px 40px 120px"
+   [:.layout {:margin "40px 400px 40px 200px"
               :position "fixed"
-              :width "800px"}]))
+              :width "750px"}]))
 
 (defn layout [page]
   [:div.layout layout-style

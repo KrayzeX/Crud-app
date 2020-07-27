@@ -23,7 +23,32 @@
    (:entry data)))
 
 
-
 (rf/reg-event-fx
  :patient/show
- (fn [{db :db} [pid phase params]]))
+ (fn [{db :db} [pid phase params]]
+   (let [id (get-in db [:route-map/current-route :params :pid])]
+     (cond
+       (= :deint phase)
+       {}
+       (or (= :params phase) (= :init phase))
+       {:dispatch [:xhr/fetch {:uri (str "http://localhost:8080/patient/" id)
+                               :req-id ::patient-show}]}))))
+
+(rf/reg-sub
+ :patient/show
+ :<- [:xhr/response ::patient-show]
+ (fn [{data :data}]
+   (:entry data)))
+
+(rf/reg-event-fx
+ ::success-delete
+ (fn [{db :db} [_ ]]))
+
+(rf/reg-event-fx
+ ::delete-patient
+ (fn [{db :db} [_ efx]]
+   (let [id (get-in db [:route-map/current-route :params :pid])]
+     {:xhr/fetch {:uri (str "http://localhost:8080/patient/" id)
+                  :method "DELETE"
+                  :success {:event ::success-delete
+                            :params {:efx efx}}}})))

@@ -43,20 +43,29 @@
 
     [:.table {:margin-top "30px"}
      [:.line-info {:display "flex"
+                   :margin-bottom "2px"
                    :box-sizing "border-box"
                    :border "1px solid grey"
                    :border-radius "10px"}
-      [:.icon {:margin-right "150px"
-               :width "20px"
-               :height "20px"}]
-      [:.patient-info {:margin-right "100px"}
+      [:.icon {:margin-right "15px"}
+       [:.ic {:width "45px"
+              :height "45px"
+              :margin-top "4px"
+              :margin-left "15px"}]]
+      [:.patient-info {:margin-right "190px"}
        [:.main-info {:font-size "20px"
-                     :font-weight "bold"}]
+                     :font-weight "bold"}
+        [:&:hover {:cursor "pointer"
+                   :text-decoration "underline"}]]
        [:.second-info {:display "flex"
                        :color "#666666"}
         [:.birth {:margin-right "15px"}]
         [:.policy-number]]]
-      [:.delete ]]]]))
+      [:.delete
+       [:&:hover {:cursor "pointer"}]
+       [:.delete-icon {:width "30px"
+                       :height "30px"
+                       :margin-top "12px"}]]]]]))
 
 (defn tittle []
   [:div.tittle style
@@ -76,14 +85,15 @@
     "Create +"]])
 
 (defn part [{{resource :resource} :resource :as args}]
-  (println (:gender resource))
   [:div.line-info ^{:key (str (:patient_id resource))}
-   [:div.icon
-    (if (= (:gender resource) "male")
-      [:div.male-icon]
-      [:div.female-icon])]
+   (if (= (:gender resource) "male")
+     [:div.icon
+      [:img.ic {:src "person.svg"}]]
+     [:div.icon
+      [:img.ic {:src "woman.svg"}]])
    [:div.patient-info
     [:div.main-info
+     {:on-click #(rf/dispatch [::redirect/redirect {:uri (str "/patient/" (:id args))}])}
      (let [firstname (get-in resource [:name :first-name])
            family (get-in resource [:name :surname])
            middlename (get-in resource [:name :middle-name])]
@@ -94,7 +104,8 @@
      [:div.policy-number
       (str "Policy number: " (:policy-number resource))]]]
    [:div.delete
-    [:div.delete-icon]]])
+    {:on-click #(rf/dispatch [::model/delete-patient ::redirect/redirect])}
+    [:img.delete-icon {:src "trash.svg"}]]])
 
 (defn patient-list [data]
   [:div.table
@@ -103,13 +114,19 @@
     data)])
 
 (defn patients [data]
-  (let [m @(rf/subscribe [:patient/index])]
+  (let [m (rf/subscribe [:patient/index])]
     (fn []
       [:div.page
        [tittle]
        [page-line]
        [:div.main
         [actions]
-        [patient-list m]]])))
+        [patient-list @m]]])))
+
+(defn patient-show [data]
+  (let [m (rf/subscribe [:patient/show])]
+    (fn []
+      [:div.page])))
 
 (pages/reg-page :patient/index patients)
+(pages/reg-page :patient/show patient-show)

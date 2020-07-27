@@ -8,11 +8,13 @@
     {:status 200
      :body {:entry data}}))
 
-(defn patient-read [request]
-  (let [pid (:params request)
-        data (db/query ["select * from patient where id = ?" pid])]
+(defn patient-read [{{:keys [id]} :params :as request}]
+  (print request)
+  (if-let [data (db/query-first ["select * from patient where id = ?" id])]
     {:status 200
-     :body data}))
+     :body {:entry data}}
+    {:status 404
+     :body {:message "Patient has not been found!"}}))
 
 (defn patient-update [request])
 

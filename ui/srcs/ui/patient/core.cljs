@@ -104,7 +104,7 @@
      [:div.policy-number
       (str "Policy number: " (:policy-number resource))]]]
    [:div.delete
-    {:on-click #(rf/dispatch [::model/delete-patient ::redirect/redirect])}
+    {:on-click #(rf/dispatch [::model/delete-patient (:id args) ::redirect/redirect])}
     [:img.delete-icon {:src "trash.svg"}]]])
 
 (defn patient-list [data]
@@ -123,10 +123,85 @@
         [actions]
         [patient-list @m]]])))
 
+(def card-style
+  (styles/style
+   [:*
+    [:.edit-action {:display "flex"
+                    :border-bottom "2px solid #AEADB2"
+                    :justify-content "flex-end"
+                    :margin-bottom "20px"}
+     [:.edit {:height "30px"
+              :padding "2px 7px"
+              :box-shadow "0 0 5px rgba(0,0,0,0.5)"
+              :font-weight "500"
+              :margin-bottom "15px"
+              :color "white"
+              :background-color "#FFCC73"
+              :width "fit-content"
+              :box-sizing "border-box"
+              :border "1px solid #FFA200"}
+      [:&:hover {:cursor "pointer"
+                 :background-color "#Fdd896"}]
+      [:&:active {:background-color "#FFBA40"}]]]
+    [:.card {:box-sizing "border-box"
+             :border-radius "15px"
+             :border "2px solid grey"}
+     [:.patient {:display "flex"}
+      [:.photo {:margin "15px 15px 15px 15px"
+                :box-sizing "border-box"
+                :border "2px solid grey"
+                :border-radius "5px"
+                :padding "3px 0 0 0"}
+       [:.icon {:width "100px"
+                :height "100px"}]]]
+     [:.information {:margin-top "15px"}
+      [:.first {:font-size "24px"
+                :font-weight "500"}]
+      [:.second {:display "flex"
+                 :color "#666666"}
+       [:.birth {:padding-right "15px"}]]
+      [:.third {:font-size "18px"}]
+      [:.fourth {:color "#555555"}]]]]))
+
+(defn card-action [args]
+  [:div.edit-action
+     [:div.edit
+      {:on-click #(rf/dispatch [::redirect/redirect {:uri (str"/patient/" (:id args) "/edit")}])}
+      "Edit"]])
+
+(defn patient-card [{{resource :resource} :resource :as args}]
+  [:div.patient
+   [:div.photo
+    (if (= "male" (:gender resource))
+      [:img.icon {:src "person.svg"}]
+      [:img.icon {:src "woman.svg"}])]
+   [:div.information
+    [:div.first
+     (let [name (get-in resource [:name :first-name])
+           family (get-in resource [:name :surname])
+           middle (get-in resource [:name :middle-name])]
+       (str family " " name " " middle))]
+    [:div.second
+     [:div.birth
+      (str "Birth date: " (:birth-date resource))]
+     [:div.gender
+      (str "Gender: " (:gender resource))]]
+    [:div.third
+     (str "Policy: " (:policy-number resource))]
+    [:div.fourth
+     (let [country (get-in resource [:address :country])
+           city (get-in resource [:address :city])
+           street (get-in resource [:address :street])
+           index (get-in resource [:address :index])]
+       (str "Patient address: " country ", " city ", " street ", " index))]]])
+
 (defn patient-show [data]
   (let [m (rf/subscribe [:patient/show])]
     (fn []
-      [:div.page])))
+      [:div.page
+       [card-action @m]
+       [:div.card card-style
+        [patient-card @m]]])))
 
 (pages/reg-page :patient/index patients)
 (pages/reg-page :patient/show patient-show)

@@ -17,7 +17,7 @@
 (def routes
   {"patient" {"search" {:GET crud/patient-list}
               "new" {:GET crud/patient-create}
-              [:pid] {:GET crud/patient-read
+              [:id] {:GET crud/patient-read
                       :DELETE crud/patient-delete
                       :POST crud/patient-update}}})
 

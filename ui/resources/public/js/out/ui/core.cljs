@@ -13,7 +13,9 @@
    [ui.pages :as pages]
    [ui.routes :as routes]
 
-   [ui.patient.core]))
+   [ui.patient.core]
+   [ui.patient.edit.view]
+   [ui.patient.create.view]))
 
 (rf/reg-event-fx
  ::initialize

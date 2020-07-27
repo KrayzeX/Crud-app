@@ -148,6 +148,7 @@ goog.addDependency("../ajax/ring.js", ['ajax.ring'], ['ajax.formats', 'ajax.inte
 goog.addDependency("../ajax/simple.js", ['ajax.simple'], ['ajax.formats', 'goog.net.XhrIo', 'ajax.interceptors', 'cljs.core', 'ajax.protocols', 'ajax.util', 'clojure.string']);
 goog.addDependency("../ajax/easy.js", ['ajax.easy'], ['ajax.formats', 'ajax.transit', 'ajax.json', 'ajax.url', 'cljs.core', 'ajax.ring', 'ajax.simple']);
 goog.addDependency("../zframes/query_string.js", ['zframes.query_string'], ['cljs.core', 'clojure.string', 're_frame.core']);
+goog.addDependency("../ui/patient/edit/view.js", ['ui.patient.edit.view'], ['cljs.core']);
 goog.addDependency("../route_map/core.js", ['route_map.core'], ['cljs.core', 'clojure.string']);
 goog.addDependency("../ui/routes.js", ['ui.routes'], ['reagent.core', 'cljs.core', 'route_map.core', 're_frame.db']);
 goog.addDependency("../zframes/window_location.js", ['zframes.window_location'], ['cljs.core', 'clojure.string', 're_frame.core']);
@@ -177,12 +178,15 @@ goog.addDependency("../ui/layout.js", ['ui.layout'], ['reagent.core', 'cljs.core
 goog.addDependency("../cljs/spec/alpha.js", ['cljs.spec.alpha'], ['cljs.core', 'goog.object', 'clojure.string', 'clojure.walk', 'cljs.spec.gen.alpha']);
 goog.addDependency("../zframes/openid.js", ['zframes.openid'], ['cljs.core', 'goog.crypt.base64', 'clojure.string', 'cljs.spec.alpha', 're_frame.core']);
 goog.addDependency("../zframes/cookies.js", ['zframes.cookies'], ['goog.net.cookies', 'cljs.core', 'cljs.reader', 're_frame.core']);
+goog.addDependency("../ui/patient/edit/model.js", ['ui.patient.edit.model'], ['cljs.core']);
 goog.addDependency("../zframes/browser.js", ['zframes.browser'], ['cljs.core']);
 goog.addDependency("../zframes/xhr.js", ['zframes.xhr'], ['zframes.redirect', 'cljs.core', 'clojure.string', 're_frame.db', 're_frame.core']);
 goog.addDependency("../zframes/xf.js", ['zframes.xf'], ['cljs.core']);
-goog.addDependency("../ui/core.js", ['ui.core'], ['zframes.redirect', 'ui.layout', 'ui.pages', 'ui.routes', 'reagent.core', 'cljs.core', 'ui.patient.core', 'zframes.xhr', 'clojure.string', 'zframes.routing', 're_frame.core', 'reagent.dom']);
+goog.addDependency("../ui/patient/create/view.js", ['ui.patient.create.view'], ['cljs.core']);
+goog.addDependency("../ui/core.js", ['ui.core'], ['zframes.redirect', 'ui.layout', 'ui.pages', 'ui.routes', 'reagent.core', 'cljs.core', 'ui.patient.edit.view', 'ui.patient.core', 'zframes.xhr', 'clojure.string', 'ui.patient.create.view', 'zframes.routing', 're_frame.core', 'reagent.dom']);
 goog.addDependency("../zframes/effects.js", ['zframes.effects'], ['cljs.core', 're_frame.core']);
 goog.addDependency("../zframes/storage.js", ['zframes.storage'], ['cljs.core', 're_frame.core']);
+goog.addDependency("../ui/patient/create/model.js", ['ui.patient.create.model'], ['cljs.core']);
 goog.addDependency("../zframes/hotkeys.js", ['zframes.hotkeys'], ['cljs.core', 're_frame.db', 're_frame.core']);
 goog.addDependency("../zframes/zquery_string.js", ['zframes.zquery_string'], ['cljs.core', 'zframes.window_location', 'zframes.browser', 'clojure.string', 're_frame.core']);
 goog.addDependency("../dev/reload.js", ['dev.reload'], ['ui.core', 'cljs.core']);

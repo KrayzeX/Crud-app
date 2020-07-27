@@ -42,13 +42,11 @@
 
 (rf/reg-event-fx
  ::success-delete
- (fn [{db :db} [_ ]]))
+ (fn [{db :db} [_]]))
 
 (rf/reg-event-fx
  ::delete-patient
- (fn [{db :db} [_ efx]]
-   (let [id (get-in db [:route-map/current-route :params :pid])]
+ (fn [{db :db} [_ id]]
      {:xhr/fetch {:uri (str "http://localhost:8080/patient/" id)
                   :method "DELETE"
-                  :success {:event ::success-delete
-                            :params {:efx efx}}}})))
+                  :success {:event ::success-delete}}}))

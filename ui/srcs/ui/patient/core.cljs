@@ -85,7 +85,7 @@
     "Create +"]])
 
 (defn part [{{resource :resource} :resource :as args}]
-  [:div.line-info ^{:key (str (:patient_id resource))}
+  [:div.line-info 
    (if (= (:gender resource) "male")
      [:div.icon
       [:img.ic {:src "person.svg"}]]
@@ -104,7 +104,7 @@
      [:div.policy-number
       (str "Policy number: " (:policy-number resource))]]]
    [:div.delete
-    {:on-click #(rf/dispatch [::model/delete-patient (:id args) ::redirect/redirect])}
+    {:on-click #(rf/dispatch [::model/delete-patient (:id args)])}
     [:img.delete-icon {:src "trash.svg"}]]])
 
 (defn patient-list [data]

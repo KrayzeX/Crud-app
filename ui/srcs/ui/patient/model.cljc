@@ -6,15 +6,20 @@
    [clojure.string :as str]))
 
 (rf/reg-event-fx
+ :patient/get
+ (fn [{db :db} [_]]
+   {:xhr/fetch {:uri "http://localhost:8080/patient/search"
+                :req-id ::patient-list}
+    :db (assoc db :loading? true)}))
+
+(rf/reg-event-fx
  :patient/index
  (fn [{db :db} [_ phase params]]
    (cond
      (= :deint phase)
      {}
      (or (= :params phase) (= :init phase))
-     {:xhr/fetch {:uri "http://localhost:8080/patient/search"
-                  :req-id ::patient-list}
-      :db (assoc db :loading? true)})))
+     {:dispatch [:patient/get]})))
 
 (rf/reg-sub
  :patient/index
@@ -22,11 +27,10 @@
  (fn [{data :data}]
    (:entry data)))
 
-
 (rf/reg-event-fx
  :patient/show
- (fn [{db :db} [pid phase params]]
-   (let [id (get-in db [:route-map/current-route :params :pid])]
+ (fn [{db :db} [_ phase params]]
+   (let [id (:pid params)]
      (cond
        (= :deint phase)
        {}
@@ -42,7 +46,8 @@
 
 (rf/reg-event-fx
  ::success-delete
- (fn [{db :db} [_]]))
+ (fn [{db :db} [_]]
+   {:dispatch [:patient/get]}))
 
 (rf/reg-event-fx
  ::delete-patient

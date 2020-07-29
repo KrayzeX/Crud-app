@@ -15,11 +15,12 @@
                :font-weight "500"
                :border-bottom "2px solid grey"
                :margin-bottom "20px"}]
+
     [:.create {:display "flex"
                :margin-bottom "15px"}
      [:.main-info {:font-size "18px"
                    :font-weight "500"
-                   :margin-right "200px"}
+                   :margin-right "40px"}
       [:.name {:font-size "14px"
                :width "250px"}]
       [:.surname {:font-size "14px"
@@ -28,11 +29,33 @@
                  :width "250px"}]
       [:.birth {:font-size "14px"
                  :width "130px"}]]
+
      [:.additional {:font-size "16px"
-                    :color "#666666"}
+                    :color "#666666"
+                    :margin-right "40px"}
       [:.first
        [:.gender
-        [:&:hover {:cursor "pointer"}]]]]]
+        [:&:hover {:cursor "pointer"}]]]
+      [:.second
+       [:.policy {:font-size "12px"
+                  :width "200px"}]]
+      [:.third
+       [:.id {:font-size "12px"
+              :width "70px"}]]]
+
+     [:.address-info {:color "#555555"}
+      [:.address {:font-weight "500"
+                  :color "#000000"}]
+      [:.first
+       [:.country {:font-size "14px"}]]
+      [:.second
+       [:.city {:font-size "14px"}]]
+      [:.third
+       [:.street {:font-size "14px"}]]
+      [:.fourth
+       [:.index {:font-size "14px"
+                 :width "100px"}]]]]
+
     [:.action {:display "flex"
                :justify-content "center"}
      [:.button {:box-sizing "border-box"
@@ -48,6 +71,61 @@
                  :background-color "#B4F3A4"}]
       [:&:active {:background-color "#7ACB7A"}]]]]))
 
+(defn main-info []
+  [:div.main-info
+   [:div.first
+    [:div.input-tittle
+     "First name: "]
+    [:input.name]]
+   [:div.second
+    [:div.input-tittle
+     "Surname: "]
+    [:input.surname]]
+   [:div.third
+    [:div.input-tittle
+     "Middle name: "]
+    [:input.middle]]
+   [:div.fourth
+    [:div.input-tittle
+     "Birth date: "]
+    [:input.birth]]])
+
+(defn additional []
+  [:div.additional
+   [:div.first
+    [:div.input-tittle
+     "Gender: "]
+    [:select.gender
+     [:option
+      "male"]
+     [:option
+      "female"]]]
+   [:div.second
+    [:div.input-tittle
+     "Policy number: "]
+    [:input.policy]]
+   [:div.third
+    [:div.input-tittle
+     "Patient id: "]
+    [:input.id]]])
+
+(defn address []
+  [:div.address-info
+   [:div.address
+    "Address"]
+   [:div.first
+    [:div "Country:"]
+    [:input.country]]
+   [:div.second
+    [:div "City:"]
+    [:input.city]]
+   [:div.third
+    [:div "Street:"]
+    [:input.street]]
+   [:div.fourth
+    [:div "Index"]
+    [:input.index]]])
+
 (defn patient-create [data]
   (let [m (assoc {} :hi "hi")]
     (fn []
@@ -55,44 +133,9 @@
        [:div.tittle
         "New patient"]
        [:div.create
-        [:div.main-info
-         [:div.first
-          [:div.input-tittle
-           "First name: "]
-          [:input.name]]
-         [:div.second
-          [:div.input-tittle
-           "Surname: "]
-          [:input.surname]]
-         [:div.third
-          [:div.input-tittle
-           "Middle name: "]
-          [:input.middle]]
-         [:div.fourth
-          [:div.input-tittle
-           "Birth date: "]
-          [:input.birth]]]
-        [:div.additional
-         [:div.first
-          [:div.input-tittle
-           "Gender: "]
-          [:select.gender
-           [:option
-            "male"]
-           [:option
-            "female"]]]
-         [:div.second
-          [:div.input-tittle
-           "Policy number: "]
-          [:input]]
-         [:div.third
-          [:div.input-tittle
-           "Patient id: "]
-          [:input]]
-         [:div.fourth
-          [:div.input-tittle
-           "Address: "]
-          [:input]]]]
+        [main-info]
+        [additional]
+        [address]]
        [:div.action
         [:div.button
          "Create"]]])))

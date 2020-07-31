@@ -71,26 +71,35 @@
                  :background-color "#B4F3A4"}]
       [:&:active {:background-color "#7ACB7A"}]]]]))
 
-(defn main-info []
+(defn input [path]
+  (let [current (r/atom "")]
+    (fn []
+      [:input {:type "text"
+               :value @current
+               :on-change #(do
+                            (reset! current (-> % .-target .-value))
+                            (rf/dispatch [::model/set-value path @current]))}])))
+
+(defn main-info [{{resource :resource} :resource :as args}]
   [:div.main-info
    [:div.first
     [:div.input-tittle
      "First name: "]
-    [:input.name]]
+    [input [:form-values :name]]]
    [:div.second
     [:div.input-tittle
      "Surname: "]
-    [:input.surname]]
+    [input [:form-values :surname]]]
    [:div.third
     [:div.input-tittle
      "Middle name: "]
-    [:input.middle]]
+    [input [:form-values :middle-name]]]
    [:div.fourth
     [:div.input-tittle
      "Birth date: "]
-    [:input.birth]]])
+    [input [:form-values :birth-date]]]])
 
-(defn additional []
+(defn additional [{{resource :resource} :resource :as args}]
   [:div.additional
    [:div.first
     [:div.input-tittle
@@ -103,28 +112,29 @@
    [:div.second
     [:div.input-tittle
      "Policy number: "]
-    [:input.policy]]
+    [input [:form-values :policy-number]]]
    [:div.third
     [:div.input-tittle
      "Patient id: "]
-    [:input.id]]])
+    [input [:form-values :id]]]])
 
-(defn address []
+
+(defn address [{{resource :resource} :resource :as args}]
   [:div.address-info
    [:div.address
     "Address"]
    [:div.first
     [:div "Country:"]
-    [:input.country]]
+    [input [:form-values :address :country]]]
    [:div.second
     [:div "City:"]
-    [:input.city]]
+    [input [:form-values :address :city]]]
    [:div.third
     [:div "Street:"]
-    [:input.street]]
+    [input [:form-values :address :street]]]
    [:div.fourth
     [:div "Index"]
-    [:input.index]]])
+    [input [:form-values :address :index]]]])
 
 (defn patient-create [data]
   (let [m (assoc {} :hi "hi")]
@@ -138,6 +148,7 @@
         [address]]
        [:div.action
         [:div.button
+         {:on-click (rf/dispatch [::model/create-patient])}
          "Create"]]])))
 
 (pages/reg-page :patient/create patient-create)

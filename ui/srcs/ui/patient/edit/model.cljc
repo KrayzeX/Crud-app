@@ -1,6 +1,7 @@
 (ns ui.patient.edit.model
   (:require
    [re-frame.core :as rf]
+   [zframes.redirect :as redirect]
    [clojure.string :as str]))
 
 
@@ -20,3 +21,15 @@
  (fn [{data :data}]
    (:entry data)))
 
+(rf/reg-event-fx
+ ::save-change
+ (fn [{db :db} [_ phase params]]
+   (println (keys db))
+   {:dispatch [:xhr/fetch {:uri (str "http://localhost:8080/patient/" (:pid params))
+                           :method "PUT"
+                           :success {:event [::redirect/redirect {:uri (str "/patient/" (:pid params))}]}}]}))
+
+(rf/reg-event-fx
+ ::set-value
+ (fn [{db :db} [_ path value]]
+   {:db (assoc-in db path value)}))

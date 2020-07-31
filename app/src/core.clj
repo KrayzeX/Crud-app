@@ -16,11 +16,10 @@
 
 (def routes
   {"patient" {"search" {:GET crud/patient-list}
-              "new" {:GET crud/patient-create}
+              "new" {:PUT crud/patient-create}
               [:id] {:GET crud/patient-read
-                      :DELETE crud/patient-delete
-                      :POST crud/patient-update}}})
-
+                     :DELETE crud/patient-delete
+                     :PUT crud/patient-update}}})
 
 (defn dispatch [{meth :request-method uri :uri :as req}]
   (if-let [{handler :match params :params} (rm/match [meth uri] #'routes)]
@@ -28,7 +27,8 @@
     {:status 404 :body "404: page not found!"}))
 
 (defn allow-handler [handler]
-  (wrap-cors handler :access-control-allow-origin #".*"
+  (wrap-cors handler
+             :access-control-allow-origin #".*"
              :access-control-allow-methods [:get :post :put :delete]))
 
 

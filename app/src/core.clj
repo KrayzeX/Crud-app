@@ -13,7 +13,6 @@
             [dbcore :refer :all]
             [crud :as crud]))
 
-
 (def routes
   {"patient" {"search" {:GET crud/patient-list}
               "new" {:PUT crud/patient-create}
@@ -26,15 +25,35 @@
     (handler (assoc req :route-params params))
     {:status 404 :body "404: page not found!"}))
 
-(defn allow-handler [handler]
-  (wrap-cors handler
-             :access-control-allow-origin #".*"
-             :access-control-allow-methods [:get :post :put :delete]))
+(defn preflight
+  [{meth :request-method hs :headers :as req}]
+  (let [headers (get hs "access-control-request-headers")
+        origin (get hs "origin")
+        meth  (get hs "access-control-request-method")]
+    {:status 200
+     :headers {"Access-Control-Allow-Headers" headers
+               "Access-Control-Allow-Methods" meth
+               "Access-Control-Allow-Origin" origin
+               "Access-Control-Allow-Credentials" "true"
+               "Access-Control-Expose-Headers" "Location, Transaction-Meta, Content-Location, Category, Content-Type, X-total-count"}}))
 
+(defn allow [resp req]
+  (let [origin (get-in req [:headers "origin"])]
+    (update resp :headers merge
+            {"Access-Control-Allow-Origin" origin
+             "Access-Control-Allow-Credentials" "true"
+             "Access-Control-Expose-Headers" "Location, Content-Location, Category, Content-Type, X-total-count"})))
+
+(defn mk-handler [dispatch]
+  (fn [{headers :headers uri :uri :as req}]
+    (if (= :options (:request-method req))
+      (preflight req)
+      (let [resp (dispatch req)]
+        (-> resp (allow req))))))
 
 (def app
   (-> dispatch
-      allow-handler
+      mk-handler
       wrap-json-body
       wrap-params
       wrap-json-response

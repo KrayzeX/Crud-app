@@ -60,6 +60,7 @@
                :justify-content "center"}
      [:.button {:box-sizing "border-box"
                 :box-shadow "0 0 5px rgba(0,0,0,0.5)"
+                :margin-right "15px"
                 :background-color "#7BE85E"
                 :font-weight "500"
                 :width "fit-content"
@@ -69,37 +70,46 @@
                 :border "1px solid #70AE60"}
       [:&:hover {:cursor "pointer"
                  :background-color "#B4F3A4"}]
-      [:&:active {:background-color "#7ACB7A"}]]]]))
+      [:&:active {:background-color "#7ACB7A"}]]
 
-(defn input [path]
-  (let [current (r/atom "")]
-    (fn []
-      [:input {:type "text"
-               :value @current
-               :on-change #(do
-                            (reset! current (-> % .-target .-value))
-                            (rf/dispatch [::model/set-value path @current]))}])))
+     [:.cancel-button {:box-sizing "border-box"
+                       :box-shadow "0 0 5px rgba(0,0,0,0.5)"
+                       :background-color "#EF5417"
+                       :font-weight "500"
+                       :width "fit-content"
+                       :color "#ffffff"
+                       :line-height "24px"
+                       :padding "3px 7px"
+                       :border "1px solid #9B3107"}
+      [:&:hover {:cursor "pointer"
+                 :background-color "#F77F4F"}]
+      [:&:active {:background-color "#B35C3A"}]]]]))
 
-(defn main-info [{{resource :resource} :resource :as args}]
+(defn input [path value]
+  [:input {:type "text"
+           :value (path @value)
+           :on-change #(rf/dispatch [::model/set-value [:form-values path] (-> % .-target .-value)])}])
+
+(defn main-info [m]
   [:div.main-info
    [:div.first
     [:div.input-tittle
-     "First name: "]
-    [input [:form-values :name]]]
+     "Surname: "]
+    [input :surname m]]
    [:div.second
     [:div.input-tittle
-     "Surname: "]
-    [input [:form-values :surname]]]
+     "First name: "]
+    [input :name m]]
    [:div.third
     [:div.input-tittle
      "Middle name: "]
-    [input [:form-values :middle-name]]]
+    [input :middle-name m]]
    [:div.fourth
     [:div.input-tittle
      "Birth date: "]
-    [input [:form-values :birth-date]]]])
+    [input :birth-date m]]])
 
-(defn additional [{{resource :resource} :resource :as args}]
+(defn additional [m]
   [:div.additional
    [:div.first
     [:div.input-tittle
@@ -112,43 +122,46 @@
    [:div.second
     [:div.input-tittle
      "Policy number: "]
-    [input [:form-values :policy-number]]]
+    [input :policy m]]
    [:div.third
     [:div.input-tittle
      "Patient id: "]
-    [input [:form-values :id]]]])
+    [input :patient-id m]]])
 
 
-(defn address [{{resource :resource} :resource :as args}]
+(defn address [m]
   [:div.address-info
    [:div.address
     "Address"]
    [:div.first
     [:div "Country:"]
-    [input [:form-values :address :country]]]
+    [input :country m]]
    [:div.second
     [:div "City:"]
-    [input [:form-values :address :city]]]
+    [input :city m]]
    [:div.third
     [:div "Street:"]
-    [input [:form-values :address :street]]]
+    [input :street m]]
    [:div.fourth
     [:div "Index"]
-    [input [:form-values :address :index]]]])
+    [input :index m]]])
 
-(defn patient-create [data]
-  (let [m (assoc {} :hi "hi")]
+(defn create-page [data]
+  (let [m (rf/subscribe [:patient/create])]
     (fn []
       [:div.page create-stytle
        [:div.tittle
         "New patient"]
        [:div.create
-        [main-info]
-        [additional]
-        [address]]
+        [main-info m]
+        [additional m]
+        [address m]]
        [:div.action
         [:div.button
-         {:on-click (rf/dispatch [::model/create-patient])}
-         "Create"]]])))
+         {:on-click #(rf/dispatch [::model/create-patient])}
+         "Create"]
+        [:div.cancel-button
+         {:on-click #(rf/dispatch [::model/cancel])}
+         "Cancel"]]])))
 
-(pages/reg-page :patient/create patient-create)
+(pages/reg-page :patient/create create-page)

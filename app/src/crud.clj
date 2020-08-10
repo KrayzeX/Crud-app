@@ -15,7 +15,10 @@
     {:status 404
      :body {:message "Patient has not been found!"}}))
 
-(defn patient-update [request])
+(defn patient-update [{body :body :as request}]
+  (let [patient-id (get-in body [:route-params :id])
+        old-patient (db/query-first ["select resource from patient where id =?" patient-id])]
+    ))
 
 (defn patient-create [request]
   )

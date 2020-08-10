@@ -59,6 +59,7 @@
     [:.action {:display "flex"
                :justify-content "center"}
      [:.button {:box-sizing "border-box"
+                :margin-right "15px"
                 :box-shadow "0 0 5px rgba(0,0,0,0.5)"
                 :background-color "#7BE85E"
                 :font-weight "500"
@@ -69,41 +70,46 @@
                 :border "1px solid #70AE60"}
       [:&:hover {:cursor "pointer"
                  :background-color "#A8F68B"}]
-      [:&:active {:background-color "#65C043"}]]]]))
+      [:&:active {:background-color "#65C043"}]]
+
+     [:.cancel-button {:box-sizing "border-box"
+                       :box-shadow "0 0 5px rgba(0,0,0,0.5)"
+                       :background-color "#EF5417"
+                       :font-weight "500"
+                       :width "fit-content"
+                       :color "#ffffff"
+                       :line-height "24px"
+                       :padding "3px 7px"
+                       :border "1px solid #9B3107"}
+      [:&:hover {:cursor "pointer"
+                 :background-color "#F77F4F"}]
+      [:&:active {:background-color "#B35C3A"}]]]]))
 
 (defn input [path value]
-  (let [current (r/atom value)]
-    (fn []
-      [:input {:type "text"
-               :value @current
-               :on-change #(do
-                            (reset! current (-> % .-target .-value))
-                            (rf/dispatch [::model/set-value path @current]))}])))
+  [:input {:type "text"
+           :value (path @value)
+           :on-change #(rf/dispatch [::model/set-value [:form-values path] (-> % .-target .-value)])}])
 
-(defn main-info [{{resource :resource} :resource :as args}]
+(defn main-info [data]
   [:div.main-info
    [:div.first
     [:div.input-tittle
-     "First name: "]
-    (let [name (get-in resource [:name :first-name])]
-      [input [:form-values :name] name])]
+     "Surname: "]
+    [input :surname data]]
    [:div.second
     [:div.input-tittle
-     "Surname: "]
-    (let [surname (get-in resource [:name :surname])]
-      [input [:form-values :surname] surname])]
+     "First name: "]
+    [input :name data]]
    [:div.third
     [:div.input-tittle
      "Middle name: "]
-    (let [middle (get-in resource [:name :middle-name])]
-      [input [:form-values :middle-name] middle])]
+    [input :middle-name data]]
    [:div.fourth
     [:div.input-tittle
      "Birth date: "]
-    (let [birth (:birth-date resource)]
-      [input [:form-values :birth-date] birth])]])
+    [input :birth-date data]]])
 
-(defn additional [{{resource :resource} :resource :as args}]
+(defn additional [data]
   [:div.additional
    [:div.first
     [:div.input-tittle
@@ -116,49 +122,46 @@
    [:div.second
     [:div.input-tittle
      "Policy number: "]
-    (let [policy (:policy-number resource)]
-      [input [:form-values :policy] policy])]
+    [input :policy-number data]]
    [:div.third
     [:div.input-tittle
      "Patient id: "]
-    (let [id (:patient-id resource)]
-      [input [:form-values :patient-id] id])]])
+    [input :patient-id data]]])
 
 
-(defn address [{{resource :resource} :resource :as args}]
+(defn address [data]
   [:div.address-info
    [:div.address
     "Address"]
    [:div.first
     [:div "Country:"]
-    (let [country (get-in resource [:address :country])]
-      [input [:form-values :address :country] country])]
+    [input :country data]]
    [:div.second
     [:div "City:"]
-    (let [city (get-in resource [:address :city])]
-      [input [:form-values :address :city] city])]
+    [input :city data]]
    [:div.third
     [:div "Street:"]
-    (let [street (get-in resource [:address :street])]
-      [input [:form-values :address :street] street])]
+    [input :street data]]
    [:div.fourth
     [:div "Index"]
-    (let [index (get-in resource [:address :index])]
-      [input [:form-values :address :index] index])]])
+    [input :index data]]])
 
 (defn edit-page [data]
   (let [m (rf/subscribe [:patient/edit])]
     (fn []
-        [:div.page edit-stytle
-         [:div.tittle
-          "Edit patient"]
-         [:div.create
-          [main-info @m]
-          [additional @m]
-          [address @m]]
-         [:div.action
-          [:div.button
-           {:on-click #(rf/dispatch [::model/save-change])}
-           "Save"]]])))
+      [:div.page edit-stytle
+       [:div.tittle
+        "Edit patient"]
+       [:div.create
+        [main-info m]
+        [additional m]
+        [address m]]
+       [:div.action
+        [:div.button
+         {:on-click #(rf/dispatch [::model/save-change (:patient-id @m)])}
+         "Save"]
+        [:div.cancel-button
+         {:on-click #(rf/dispatch [::model/cancel (:patient-id @m)])}
+         "Cancel"]]])))
 
 (pages/reg-page :patient/edit edit-page)

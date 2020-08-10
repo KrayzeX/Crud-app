@@ -128,8 +128,19 @@
    [:*
     [:.edit-action {:display "flex"
                     :border-bottom "2px solid #AEADB2"
-                    :justify-content "flex-end"
+                    :justify-content "space-between"
                     :margin-bottom "20px"}
+     [:.back {:height "30px"
+              :padding "2px 7px"
+              :box-shadow "0 0 5px rgba(0,0,0,0.5)"
+              :font-weight "500"
+              :margin-bottom "15px"
+              :color "black"
+              :width "fit-content"
+              :box-sizing "border-box"
+              :border "1px solid grey"}
+      [:&:hover {:cursor "pointer"
+                 :background-color "#c4c4c4"}]]
      [:.edit {:height "30px"
               :padding "2px 7px"
               :box-shadow "0 0 5px rgba(0,0,0,0.5)"
@@ -165,9 +176,12 @@
 
 (defn card-action [args]
   [:div.edit-action
-     [:div.edit
-      {:on-click #(rf/dispatch [::redirect/redirect {:uri (str"/patient/" (:id args) "/edit")}])}
-      "Edit"]])
+   [:div.back
+    {:on-click #(rf/dispatch [::redirect/redirect {:uri "/"}])}
+    "To list"]
+   [:div.edit
+    {:on-click #(rf/dispatch [::redirect/redirect {:uri (str"/patient/" (:id args) "/edit")}])}
+    "Edit"]])
 
 (defn patient-card [{{resource :resource} :resource :as args}]
   [:div.patient

@@ -122,7 +122,7 @@
    [:div.second
     [:div.input-tittle
      "Policy number: "]
-    [input :policy m]]
+    [input :policy-number m]]
    [:div.third
     [:div.input-tittle
      "Patient id: "]

@@ -43,25 +43,27 @@
 
     [:.table {:margin-top "30px"}
      [:.line-info {:display "flex"
+                   :justify-content "space-between"
                    :margin-bottom "2px"
                    :box-sizing "border-box"
                    :border "1px solid grey"
                    :border-radius "10px"}
-      [:.icon {:margin-right "15px"}
-       [:.ic {:width "45px"
-              :height "45px"
-              :margin-top "4px"
-              :margin-left "15px"}]]
-      [:.patient-info {:margin-right "190px"}
-       [:.main-info {:font-size "20px"
-                     :font-weight "bold"}
-        [:&:hover {:cursor "pointer"
-                   :text-decoration "underline"}]]
-       [:.second-info {:display "flex"
-                       :color "#666666"}
-        [:.birth {:margin-right "15px"}]
-        [:.policy-number]]]
-      [:.delete
+      [:.icon-main {:display "flex"}
+       [:.icon {:margin-right "15px"}
+        [:.ic {:width "45px"
+               :height "45px"
+               :margin-top "4px"
+               :margin-left "15px"}]]
+       [:.patient-info {:margin-right "190px"}
+        [:.main-info {:font-size "20px"
+                      :font-weight "bold"}
+         [:&:hover {:cursor "pointer"
+                    :text-decoration "underline"}]]
+        [:.second-info {:display "flex"
+                        :color "#666666"}
+         [:.birth {:margin-right "15px"}]
+         [:.policy-number]]]]
+      [:.delete {:margin-right "25px"}
        [:&:hover {:cursor "pointer"}]
        [:.delete-icon {:width "30px"
                        :height "30px"
@@ -85,24 +87,25 @@
     "Create +"]])
 
 (defn part [{{resource :resource} :resource :as args}]
-  [:div.line-info 
-   (if (= (:gender resource) "male")
-     [:div.icon
-      [:img.ic {:src "person.svg"}]]
-     [:div.icon
-      [:img.ic {:src "woman.svg"}]])
-   [:div.patient-info
-    [:div.main-info
-     {:on-click #(rf/dispatch [::redirect/redirect {:uri (str "/patient/" (:id args))}])}
-     (let [firstname (get-in resource [:name :first-name])
-           family (get-in resource [:name :surname])
-           middlename (get-in resource [:name :middle-name])]
-       (str family " " firstname " " middlename))]
-    [:div.second-info
-     [:div.birth
-      (str "Birth date: " (:birth-date resource))]
-     [:div.policy-number
-      (str "Policy number: " (:policy-number resource))]]]
+  [:div.line-info
+   [:div.icon-main
+    (if (= (:gender resource) "male")
+      [:div.icon
+       [:img.ic {:src "person.svg"}]]
+      [:div.icon
+       [:img.ic {:src "woman.svg"}]])
+    [:div.patient-info
+     [:div.main-info
+      {:on-click #(rf/dispatch [::redirect/redirect {:uri (str "/patient/" (:id args))}])}
+      (let [firstname (get-in resource [:name :first-name])
+            family (get-in resource [:name :surname])
+            middlename (get-in resource [:name :middle-name])]
+        (str family " " firstname " " middlename))]
+     [:div.second-info
+      [:div.birth
+       (str "Birth date: " (:birth-date resource))]
+      [:div.policy-number
+       (str "Policy number: " (:policy-number resource))]]]]
    [:div.delete
     {:on-click #(rf/dispatch [::model/delete-patient (:id args)])}
     [:img.delete-icon {:src "trash.svg"}]]])

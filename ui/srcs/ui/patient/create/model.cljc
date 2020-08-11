@@ -39,12 +39,12 @@
  ::create-patient
  (fn [{db :db} [_]]
    (let [params-to-back (:form-values db)]
-       {:dispatch [:xhr/fetch {:uri "http://localhost:8080/patient/new"
-                               :body params-to-back
-                               :method "PUT"
-                               ;; :success {:event ::success-create}
-                               :error {:event :flash/danger
-                                       :params {:msg "Error while creating a patient!"}}}]})))
+     {:dispatch [:xhr/fetch {:uri "http://localhost:8080/patient/new"
+                             :body params-to-back
+                             :method "PUT"
+                             :success {:event ::success-create}
+                             :error {:event :flash/danger
+                                     :params {:msg "Error while creating a patient!"}}}]})))
 
 (rf/reg-event-fx
  ::cancel

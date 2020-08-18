@@ -109,16 +109,25 @@
      "Birth date: "]
     [input :birth-date data]]])
 
+(defn select [data array]
+  (let [current-value (:gender @data)
+        on-change (fn [x]
+                    (rf/dispatch [::model/change-option (.. x -target -value)]))]
+    [:select
+     {:on-change on-change
+      :value current-value}
+     (for [item array
+           :let [key item]]
+       [:option
+        {:key key :value item}
+        item])]))
+
 (defn additional [data]
   [:div.additional
    [:div.first
     [:div.input-tittle
      "Gender: "]
-    [:select.gender
-     [:option
-      "male"]
-     [:option
-      "female"]]]
+    [select data ["male" "female" "unknown"]]]
    [:div.second
     [:div.input-tittle
      "Policy number: "]

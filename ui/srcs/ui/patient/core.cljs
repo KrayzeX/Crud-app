@@ -81,7 +81,8 @@
   [:div.actions
    [:div.search
     [:input.search-form {:type "text"
-                         :placeholder "Search..."}]]
+                         :placeholder "Search..."
+                         :on-change #(debounce/debounce [::redirect/set-params {:q (-> % .-target .-value)}])}]]
    [:div.create
     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
     "Create +"]])

@@ -24,13 +24,13 @@
               (assoc-in [:form-values :name] name)
               (assoc-in [:form-values :middle-name] middle)
               (assoc-in [:form-values :birth-date] birth)
-              (assoc-in [:form-values :gender] gender)
               (assoc-in [:form-values :policy-number] policy)
               (assoc-in [:form-values :patient-id] id)
               (assoc-in [:form-values :country] country)
               (assoc-in [:form-values :city] city)
               (assoc-in [:form-values :street] street)
-              (assoc-in [:form-values :index] index))})))
+              (assoc-in [:form-values :index] index)
+              (assoc-in [:form-values :gender] gender))})))
 
 (rf/reg-event-fx
  :patient/edit
@@ -43,10 +43,26 @@
                              :req-id ::patient-show
                              :success {:event ::set-form-value}}]})))
 
+(rf/reg-event-fx
+ ::success-update
+ (fn [{db :db} [_ pid]]
+   {:dispatch [::redirect/redirect {:uri (str "/patient/" pid)}]}))
+
 (rf/reg-sub
  :patient/edit
  (fn [db]
    (:form-values db)))
+
+(rf/reg-event-fx
+ ::success-update
+ (fn [{db :db} [_ {{{:keys [patient-id]} :body} :request :as request}]]
+   {:dispatch [::redirect/redirect {:uri (str "/patient/" patient-id)}]}))
+
+(rf/reg-event-fx
+ ::change-option
+ (fn [{db :db} [_ value]]
+   {:db (-> db
+            (assoc-in [:form-values :gender] value))}))
 
 (rf/reg-event-fx
  ::save-change
@@ -54,7 +70,7 @@
    {:dispatch [:xhr/fetch {:uri (str "http://localhost:8080/patient/" pid)
                            :method "PUT"
                            :body (:form-values db)
-                           :success {:event [::redirect/redirect {:uri (str "/patient/" pid)}]}}]}))
+                           :success {:event ::success-update}}]}))
 
 (rf/reg-event-fx
  ::set-value

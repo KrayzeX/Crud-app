@@ -90,6 +90,18 @@
            :value (path @value)
            :on-change #(rf/dispatch [::model/set-value [:form-values path] (-> % .-target .-value)])}])
 
+(defn select [data array]
+  (let [current-value (:gender @data)
+        on-change (fn [x]
+                    (rf/dispatch [::model/set-option (.. x -target -value)]))]
+    [:select {:on-change on-change
+              :value current-value}
+     (for [item array
+           :let [key item]]
+       [:option
+        {:key key :value item}
+        item])]))
+
 (defn main-info [m]
   [:div.main-info
    [:div.first
@@ -114,11 +126,7 @@
    [:div.first
     [:div.input-tittle
      "Gender: "]
-    [:select.gender
-     [:option
-      "male"]
-     [:option
-      "female"]]]
+    [select m ["Select gender" "male" "female" "unknown"]]]
    [:div.second
     [:div.input-tittle
      "Policy number: "]

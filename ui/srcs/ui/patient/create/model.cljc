@@ -36,6 +36,11 @@
    (:form-values db)))
 
 (rf/reg-event-fx
+ ::set-option
+ (fn [{db :db} [_ value]]
+   {:db (assoc-in db [:form-values :gender] value)}))
+
+(rf/reg-event-fx
  ::create-patient
  (fn [{db :db} [_]]
    (let [params-to-back (:form-values db)]

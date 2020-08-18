@@ -17,9 +17,34 @@
      :body {:message "Patient has not been found!"}}))
 
 (defn patient-update [{body :body :as request}]
-  (let [patient-id (get-in body [:route-params :id])
-        old-patient (db/query-first ["select resource from patient where id =?" patient-id])]
-    ))
+  (let [id (str (get-in body ["patient-id"]))
+        name (get-in body ["name"])
+        family (get-in body ["surname"])
+        middle (get-in body ["middle-name"])
+        birth (get-in body ["birth-date"])
+        gender (get-in body ["gender"])
+        policy (get-in body ["policy-number"])
+        country (get-in body ["country"])
+        city (get-in body ["city"])
+        street (get-in body ["street"])
+        resource-type "Patient"
+        index (get-in body ["index"])
+        new-resource {:resource_type "patient"
+                      :resource {:name {:first-name name
+                                        :surname family
+                                        :middle-name middle}
+                                 :gender gender
+                                 :birth-date birth
+                                 :address {:country country
+                                           :city city
+                                           :street street
+                                           :index index}
+                                 :policy-number policy
+                                 :patient-id id}}
+        change-to-db (db/execute ["update patient set resource = ? where id = ?" new-resource id])]
+    {:status 201
+     :body {:entry {:id id
+                    :resource new-resource}}}))
 
 (defn patient-create [{body :body :as request}]
   (let [id (get-in body ["patient-id"])

@@ -16,6 +16,30 @@
     {:status 404
      :body {:message "Patient has not been found!"}}))
 
+(defn patient-search [{{:keys [params]} :route-params :as request}]
+  (let [p (map
+           #(str % "%")
+           (-> params str/trim (str/split #"%20")))
+        data (db/query (hsql/format {:select [:*]
+                                     :from [:patient]
+                                     :where (cond
+                                              (= (count p) 1)
+                                              [:or
+                                               [:like (hsql/raw "resource#>>'{resource, name, first-name}'") (first p)]
+                                               [:like (hsql/raw "resource#>>'{resource, name, surname}'") (first p)]
+                                               [:like (hsql/raw "resource#>>'{resource, policy-number}'") (first p)]]
+                                              (= (count p) 2)
+                                              [:or
+                                               [:and
+                                                [:like (hsql/raw "resource#>> '{resource, name, surname}'") (first p)]
+                                                [:like (hsql/raw "resource#>> '{resource, name, first-name}'") (second p)]]
+                                               [:and
+                                                [:like (hsql/raw "resource#>> '{resource, name, surname}'") (second p)]
+                                                [:like (hsql/raw "resource#>> '{resource, name, surname}'") (first p)]]])}))]
+    (println data)
+    {:status 200
+     :body {:entry data}}))
+
 (defn patient-update [{body :body :as request}]
   (let [id (str (get-in body ["patient-id"]))
         name (get-in body ["name"])

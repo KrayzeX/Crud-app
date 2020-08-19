@@ -28,6 +28,12 @@
    (:entry data)))
 
 (rf/reg-event-fx
+ ::patient-search
+ (fn [{db :db} [_ value]]
+   {:xhr/fetch {:uri (str "http://localhost:8080/patient/search/" value)
+                :req-id ::patient-list}}))
+
+(rf/reg-event-fx
  :patient/show
  (fn [{db :db} [_ phase params]]
    (let [id (:pid params)]

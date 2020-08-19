@@ -14,7 +14,8 @@
             [crud :as crud]))
 
 (def routes
-  {"patient" {"search" {:GET crud/patient-list}
+  {"patient" {"search" {:GET crud/patient-list
+                        [:params] {:GET crud/patient-search}}
               "new" {:PUT crud/patient-create}
               [:id] {:GET crud/patient-read
                      :DELETE crud/patient-delete

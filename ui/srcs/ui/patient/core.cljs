@@ -82,7 +82,7 @@
    [:div.search
     [:input.search-form {:type "text"
                          :placeholder "Search..."
-                         :on-change #(debounce/debounce [::redirect/set-params {:q (-> % .-target .-value)}])}]]
+                         :on-change #(rf/dispatch [::model/patient-search (-> % .-target .-value)])}]]
    [:div.create
     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
     "Create +"]])

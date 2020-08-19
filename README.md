@@ -7,5 +7,5 @@ To start server use special command from Makefile:
 To start ui use:
 ```make figwheel```
 
-When you started an application you seen something like this:
+When you started an application you saw something like this:
 ![There should be an image here](/ui/resources/public/MainPage.png)

@@ -195,9 +195,13 @@
 (defn patient-card [{{resource :resource} :resource :as args}]
   [:div.patient
    [:div.photo
-    (if (= "male" (:gender resource))
+    (cond
+      (= "male" (:gender resource))
       [:img.icon {:src "person.svg"}]
-      [:img.icon {:src "woman.svg"}])]
+      (= "female" (:gender resource))
+      [:img.icon {:src "woman.svg"}]
+      :else
+      [:img.icon {:src "unknown.svg"}])]
    [:div.information
     [:div.first
      (let [name (get-in resource [:name :first-name])

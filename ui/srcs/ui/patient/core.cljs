@@ -90,11 +90,16 @@
 (defn part [{{resource :resource} :resource :as args}]
   [:div.line-info
    [:div.icon-main
-    (if (= (:gender resource) "male")
+    (cond
+      (= (:gender resource) "male")
       [:div.icon
        [:img.ic {:src "person.svg"}]]
+      (= (:gender resource) "female")
       [:div.icon
-       [:img.ic {:src "woman.svg"}]])
+       [:img.ic {:src "woman.svg"}]]
+      :else
+      [:div.icon
+       [:img.ic {:src "unknown.svg"}]])
     [:div.patient-info
      [:div.main-info
       {:on-click #(rf/dispatch [::redirect/redirect {:uri (str "/patient/" (:id args))}])}

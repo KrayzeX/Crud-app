@@ -36,7 +36,6 @@
                                                [:and
                                                 [:like (hsql/raw "resource#>> '{resource, name, surname}'") (second p)]
                                                 [:like (hsql/raw "resource#>> '{resource, name, surname}'") (first p)]]])}))]
-    (println data)
     {:status 200
      :body {:entry data}}))
 

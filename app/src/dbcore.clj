@@ -5,34 +5,18 @@
             [mount.core :refer [defstate]]
             [manifest :as m]))
 
-;; (def datasource-options {:pool-name "hssys-pool"
-;;                          :adapter "postgresql"
-;;                          :server-name "localhost"
-;;                          :port-number 5466
-;;                          :username "hssys_admin"
-;;                          :password "qwerty"
-;;                          :database-name "hssys_db"})
-
-;; (defonce datasource
-;;   (delay (make-datasource datasource-options)))
-
-;; (defn query [req]
-;;   (j/with-db-connection [conn {:datasource @datasource}]
-;;     (j/query conn req)))
-
-;; (defn first-query [req]
-;;   (j/with-db-connection [conn {:datasource @datasource}]
-;;     (first (j/query conn req))))
-
-;; (defn exec [req]
-;;   (j/with-db-connection [conn {:datasource @datasource}]
-;;     (j/execute! conn req)))
-
 (def pool-config (delay (pg/pool :host     (get-in m/db-config [:db :host])
                                  :port     (get-in m/db-config [:db :port])
                                  :user     (get-in m/db-config [:db :user])
                                  :password (get-in m/db-config [:db :password])
                                  :dbname   (get-in m/db-config [:db :dbname])
+                                 :hikari {:read-only true})))
+
+(def test-config (delay (pg/pool :host (get-in m/db-config [:db :host])
+                                 :port (get-in m/db-config [:db :port])
+                                 :user (get-in m/db-config [:db :user])
+                                 :password (get-in m/db-config [:db :password])
+                                 :dbname "test_db"
                                  :hikari {:read-only true})))
 
 (defn query [req]
@@ -44,3 +28,13 @@
 
 (defn execute [req]
   (j/execute! @pool-config req))
+
+(defn query-test [request]
+  (j/query @test-config request))
+
+(defn query-first-test [request]
+  (-> (j/query @test-config request)
+      first))
+
+(defn execute-test [request]
+  (j/execute! @test-config request))

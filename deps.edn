@@ -9,6 +9,7 @@
                      {ring {:mvn/version "1.7.1"}
                       ring/ring-defaults {:mvn/version "0.3.2"}
                       ring/ring-json {:mvn/version "0.5.0"}
+                      ring/ring-mock {:mvn/version "0.4.0"}
                       http-kit {:mvn/version "2.3.0"}
                       matcho {:git/url "https://github.com/HealthSamurai/matcho.git"
                               :sha "5e44139038b53b6d05a186d8cd05819a96b0aab5"}
@@ -44,6 +45,18 @@
                   nrepl/nrepl {:mvn/version "0.6.0"}
                   refactor-nrepl {:mvn/version "2.4.0"}
                   cider/cider-nrepl {:mvn/version "0.22.4"}}}
+
+           :runner
+           {:extra-deps
+             {com.cognitect/test-runner
+              {:git/url "https://github.com/cognitect-labs/test-runner"
+               :sha     "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}}
+             :jvm-opts    ^:replace ["-XX:-OmitStackTraceInFastThrow" ]
+             :main-opts   ["-m" "cognitect.test-runner" "-d" "runner" "-d" "test"]}
+
+            :test
+            {:extra-paths ["app/test" "test/resources"]
+             :extra-deps  {matcho {:mvn/version "0.1.0-RC6"}}}
 
            :figwheel {:extra-deps
                       {com.bhauman/figwheel-main {:mvn/version "0.2.9"}

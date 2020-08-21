@@ -84,15 +84,15 @@
         index (get-in body ["index"])
         new-resource {:resource_type "patient"
                       :resource {:name {:first-name name
-                                            :surname family
-                                            :middle-name middle}
-                                   :gender gender
-                                   :birth-date birth
-                                   :address {:country country
-                                             :city city
-                                             :street street
-                                             :index index}
-                                   :policy-number policy
+                                        :surname family
+                                        :middle-name middle}
+                                 :gender gender
+                                 :birth-date birth
+                                 :address {:country country
+                                           :city city
+                                           :street street
+                                           :index index}
+                                 :policy-number policy
                                  :patient-id id}}
         new-patient (db/execute ["insert into patient (id, resource_type, resource) values (?, ?, ?)" id resource-type new-resource])]
     {:status 201

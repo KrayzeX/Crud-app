@@ -19,7 +19,9 @@
               "new" {:PUT crud/patient-create}
               [:id] {:GET crud/patient-read
                      :DELETE crud/patient-delete
-                     :PUT crud/patient-update}}})
+                     :PUT crud/patient-update}}
+   "mapping" {:GET nil}
+   "analytic" {:GET nil}})
 
 (defn dispatch [{meth :request-method uri :uri :as req}]
   (if-let [{handler :match params :params} (rm/match [meth uri] #'routes)]

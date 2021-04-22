@@ -13,13 +13,17 @@
     [:.navigation {:width "85px"
                    :text-align "center"
                    :height "100vh"
-                   :background-color "#0B162B"}
+                   :background-color "#374156"}
      [:.navigation-actions {:padding-top "15px"}
-      [:.button {:color "white"
-                 :font-weight "500"
-                 :margin-bottom "10px"}
+      [:.button {:background-color "white"
+                 :padding "6px"
+                 :margin-left "22px"
+                 :margin-bottom "10px"
+                 :border-radius "25px"
+                 :width "max-content"}
        [:&:hover {:cursor "pointer"
-                  :background-color "#374156"}]]]]
+                  :background-color "#D6E3FC"}]
+       [:&:active {:background-color "#586E92"}]]]]
     [:.content {:padding-left "30px"
                 :width "92vw"}]]))
 
@@ -27,17 +31,17 @@
   [:div.navigation
    [:div.navigation-actions
     [:div.button
-     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/"}])}
-     "Home"]
+     [:div.home-icon
+      {:on-click #(rf/dispatch [::redirect/redirect {:uri "/"}])}]]
     [:div.button
-     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
-     "Create"]
+     [:div.plus-icon
+      {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}]]
     [:div.button
-     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/mapping"}])}
-     "Mapping"]
+     [:div.map-icon
+      {:on-click #(rf/dispatch [::redirect/redirect {:uri "/mapping"}])}]]
     [:div.button
-     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/analytic"}])}
-     "Analytic"]]])
+     [:div.analytic-icon
+      {:on-click #(rf/dispatch [::redirect/redirect {:uri "/analytic"}])}]]]])
 
 (defn layout [page]
   [:div.layout layout-style

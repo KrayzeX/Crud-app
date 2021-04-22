@@ -28,6 +28,27 @@
     width: 30px;
     height: 30px;
     background-repeat: no-repeat;
-    background-image: url(/house.svg);
+    background-image: url(/home.svg);
+}
+
+.plus-icon {
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-image: url(/plus.svg);
+}
+
+.map-icon {
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-image: url(/map.svg);
+}
+
+.analytic-icon {
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-image: url(/analytic.svg);
 }
 

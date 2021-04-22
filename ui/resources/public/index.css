@@ -23,3 +23,11 @@
     background-repeat: no-repeat;
     background-image: url(/trash.svg);
 }
+
+.home-icon {
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-image: url(/house.svg);
+}
+

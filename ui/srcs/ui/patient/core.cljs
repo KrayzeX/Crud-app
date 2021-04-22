@@ -12,34 +12,37 @@
 (def style
   (styles/style
    [:*
-    [:.tittle {:font-size "24px"
+    [:.tittle {:padding "20px 0"
+               :color "#676B6A"
                :text-align "center"
-               :margin-bottom "20px"}]
-    [:.page-tittle {:font-size "22px"
-                    :margin-bottom "40px"
-                    :text-align "center"}]
+               :font-size "28px"
+               :font-weight "500"}]
 
     [:.actions {:display "flex"
-                :justify-content "space-between"
                 :padding-bottom "15px"
                 :border-bottom "2px solid #AEADB2"}
-     [:.search {:display "flex"}
-      [:.search-form {:width "450px"
-                      :height "30px"
-                      :border-radius "5px"
-                      :margin-right "15px"}]]
+     [:.input-group.mb-3 {:width "700px"}]
+     [:#basic-addon1 {:color "white"
+                      :font-weight "500"
+                      :opacity 0.8
+                      :background-color "#374156"}]
 
-     [:.create {:box-sizing "border-box"
-                :box-shadow "0 0 5px rgba(0,0,0,0.5)"
-                :background-color "#7BE85E"
+     [:.create {:margin-left "600px"
+                :box-sizing "border-box"
+                :text-align "center"
+                :box-shadow "0 0 3px rgba(0,37,255,0.5)"
                 :font-weight "500"
-                :color "#ffffff"
-                :line-height "24px"
+                :color "#0B162B"
+                :width "70px"
+                :height "37px"
+                :line-height "28px"
                 :padding "3px 7px"
-                :border "1px solid #70AE60"}
+                :border "1px solid #0B162B"
+                :border-radius "8px"}
       [:&:hover {:cursor "pointer"
-                 :background-color "#B4F3A4"}]
-      [:&:active {:background-color "#7ACB7A"}]]]
+                 :color "white"
+                 :background-color "#5D6F93"}]
+      [:&:active {:background-color "#0B162B"}]]]
 
     [:.table {:margin-top "30px"}
      [:.line-info {:display "flex"
@@ -71,13 +74,23 @@
 
 (defn tittle []
   [:div.tittle style
-   "Test CRUD application"])
-
-(defn page-line []
-  [:div.page-tittle
-   "Patients list"])
+   "Visualization and analysis of FHIR standart mapping"])
 
 (defn actions []
+  [:div.actions
+   [:div.input-group.mb-3
+    [:div.input-group-prepend
+     [:span.input-group-text {:id "basic-addon1"}
+      "Patient"]]
+    [:input {:type "text"
+             :class "form-control"
+             :placeholder "Search..."
+             :on-change #(rf/dispatch [::model/patient-search (-> % .-target .-value)])}]]
+   [:div.create
+    {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
+    "New"]])
+
+#_(defn actions []
   [:div.actions
    [:div.search
     [:input.search-form {:type "text"
@@ -85,7 +98,7 @@
                          :on-change #(rf/dispatch [::model/patient-search (-> % .-target .-value)])}]]
    [:div.create
     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
-    "Create +"]])
+    "New"]])
 
 (defn part [{{resource :resource} :resource :as args}]
   [:div.line-info
@@ -127,7 +140,6 @@
     (fn []
       [:div.page
        [tittle]
-       [page-line]
        [:div.main
         [actions]
         [patient-list @m]]])))

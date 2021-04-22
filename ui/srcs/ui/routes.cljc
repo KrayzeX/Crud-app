@@ -8,4 +8,6 @@
   {:. :patient/index
    "patient" {"create" {:. :patient/create}
               [:pid] {:. :patient/show
-                      "edit" {:. :patient/edit}}}})
+                      "edit" {:. :patient/edit}}}
+   "analytic" {:. :mapping/analytic}
+   "mapping" {:. :patient/mapping}})

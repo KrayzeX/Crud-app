@@ -1,4 +1,4 @@
-(ns ui.core
+(ns ^:figwheel-hooks ui.core
   (:require
    [clojure.string :as str]
    [re-frame.core :as rf]

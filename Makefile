@@ -25,9 +25,6 @@ start:
 figwheel:
 				clj -A:frontclj:figwheel -m "figwheel.main" -b "dev"
 
-test:
-				clj -A:test:runner
-
 repl:
 				make up
 				clj -A:backclj:dev -m "nrepl"

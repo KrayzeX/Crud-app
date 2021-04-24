@@ -2,7 +2,6 @@
   (:require [hikari-cp.core :refer :all]
             [clojure.java.jdbc :as j]
             [clj-postgresql.core :as pg]
-            [mount.core :refer [defstate]]
             [manifest :as m]))
 
 (def pool-config (delay (pg/pool :host     (get-in m/db-config [:db :host])

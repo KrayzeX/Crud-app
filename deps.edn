@@ -1,4 +1,5 @@
 ;; /deps.edn
+
 {:paths ["tools"]
 
  :deps {org.clojure/clojure {:mvn/version "1.10.1"}}
@@ -10,14 +11,11 @@
                       ring/ring-json {:mvn/version "0.5.0"}
                       ring-cors/ring-cors {:mvn/version "0.1.13"}
                       ring/ring-mock {:mvn/version "0.4.0"}
-                      matcho/matcho {:git/url "https://github.com/HealthSamurai/matcho.git"
-                                     :sha "5e44139038b53b6d05a186d8cd05819a96b0aab5"}
                       cheshire/cheshire {:mvn/version "5.9.0"}
                       honeysql/honeysql {:mvn/version "1.0.444"}
                       clj-http/clj-http {:mvn/version "3.10.0"}
                       clj-postgresql/clj-postgresql {:mvn/version "0.7.0"}
                       compojure/compojure {:mvn/version "1.6.1"}
-                      mount/mount {:mvn/version "0.1.12"}
                       org.clojure/java.jdbc {:mvn/version "0.7.10"}
                       hikari-cp/hikari-cp {:mvn/version "2.9.0"}
                       org.postgresql/postgresql {:mvn/version "42.2.8.jre7"}
@@ -30,31 +28,19 @@
                        day8.re-frame/re-frame-10x {:mvn/version "0.6.6"}
                        day8.re-frame/http-fx {:mvn/version "v0.2.0"}
                        re-frame/re-frame {:mvn/version "1.0.0-rc6"}
-                       re-frisk-remote/re-frisk-remote {:mvn/version "1.4.0"}
+                       re-frisk/re-frisk {:mvn/version "1.3.10"}
+                       route-map/route-map {:mvn/version "0.0.7-RC4"}
                        reagent/reagent {:mvn/version "1.0.0-alpha2"}
                        cljs-ajax/cljs-ajax {:mvn/version "0.8.0"}
-                       garden/garden {:mvn/version "1.3.9"}
-                       route-map/route-map {:mvn/version "0.0.7-RC4"}}}
+                       garden/garden {:mvn/version "1.3.9"}}}
 
-           :dev {:extra-paths ["ui/srcs"]
+           :dev {:extra-paths ["app/src"]
                  :extra-deps
                  {org.clojure/tools.cli {:mvn/version "1.0.194"}
                   nrepl/nrepl {:mvn/version "0.8.3"}
                   refactor-nrepl/refactor-nrepl {:mvn/version "2.4.0"}
                   cider/cider-nrepl {:mvn/version "0.22.4"}}}
 
-           :runner
-           {:extra-deps
-             {com.cognitect/test-runner
-              {:git/url "https://github.com/cognitect-labs/test-runner"
-               :sha     "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}}
-             :jvm-opts    ^:replace ["-XX:-OmitStackTraceInFastThrow" ]
-             :main-opts   ["-m" "cognitect.test-runner" "-d" "runner" "-d" "test"]}
-
-            :test
-            {:extra-paths ["app/test" "test/resources"]
-             :extra-deps  {matcho/matcho {:mvn/version "0.1.0-RC6"}}}
-
            :figwheel {:extra-deps
                       {com.bhauman/figwheel-main {:mvn/version "0.2.12"}
-                       binaryage/devtools    {:mvn/version "1.0.2"}}}}}
+                       binaryage/devtools {:mvn/version "1.0.2"}}}}}

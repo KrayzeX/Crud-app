@@ -20,7 +20,8 @@
 (declare server)
 
 (defn -main [& args]
-  (def server (server/start-server :port 7999 :handler handler))
+  (def server (server/start-server :port 7999
+                                   :handler handler))
   (println "nREPL server started at port:" 7999))
 
 (comment

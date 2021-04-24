@@ -9,7 +9,8 @@
     {:status 200
      :body {:entry data}}))
 
-(defn patient-read [{{:keys [id]} :route-params :as request}]
+(defn patient-read [id]
+  (println "Data: " id)
   (if-let [data (db/query-first ["select * from patient where id = ?" id])]
     {:status 200
      :body {:entry data}}

@@ -1,6 +1,11 @@
 ---- db: -h localhost -p 5466 -U hssys_admin hssys_db
 select 1
 ----
+create table if not exists patient (
+       id integer not null,
+       resource_type text,
+       resource json not null)
+----
 insert into patient (id, resource_type, resource)
        values ('101', 'Patient', '{"resource_type": "patient",
                                    "resource": {"name": {"first-name": "Ksenia",

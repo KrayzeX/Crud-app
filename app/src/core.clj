@@ -1,6 +1,5 @@
 (ns core
   (:require [clojure.string :as str]
-            [org.httpkit.server :as server]
             [clojure.pprint :as pp]
 
             [ring.middleware.reload :refer [wrap-reload]]
@@ -9,19 +8,20 @@
             [ring.middleware.json   :refer [wrap-json-response wrap-json-body]]
             [ring.adapter.jetty :as jetty]
 
-            [route-map.core :as rm]
+            [compojure.core :refer :all]
+            [compojure.route :as route]
             [dbcore :refer :all]
-            [crud :as crud]))
+            [crud :as crud])
+  (:gen-class))
 
-(def routes
-  {"patient" {"search" {:GET crud/patient-list
-                        [:params] {:GET crud/patient-search}}
-              "new" {:PUT crud/patient-create}
-              [:id] {:GET crud/patient-read
-                     :DELETE crud/patient-delete
-                     :PUT crud/patient-update}}
-   "mapping" {:GET nil}
-   "analytic" {:GET nil}})
+
+(defroutes app-routes
+  (GET "/patient/search" [] crud/patient-list)
+  (GET "/patient/:params" [] crud/patient-search)
+  (PUT "/patient/new" [] crud/patient-create)
+  (GET "/patient/:id" [id] (crud/patient-read id))
+  (DELETE "/patient/:id" [] crud/patient-delete)
+  (PUT "/patient/:id" [] crud/patient-update))
 
 (defn allow-access [handler]
   (fn [request]
@@ -29,10 +29,11 @@
       (-> response
           (assoc-in [:headers "Access-Control-Allow-Origin"] "*")
           (assoc-in [:headers "Access-Control-Allow-Headers"] "*")
-          (assoc-in [:headers "Access-control-Allow-Methods"] "*")))))
+          (assoc-in [:headers "Access-Control-Allow-Methods"] "*")))))
+
 
 (def app
-  (-> routes
+  (-> app-routes
       allow-access
       wrap-json-body
       wrap-params
@@ -41,8 +42,6 @@
 
 
 (defn -main [& args]
-  (server/run-server #'app {:port 8080 :join? false})
+  (jetty/run-jetty #'app {:port 8080
+                          :join? false})
   (println "WebApp started at port: 8080..."))
-
-(comment
-  (jetty/run-jetty #'dispatch {:port 8080 :join? false}))

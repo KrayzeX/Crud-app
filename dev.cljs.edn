@@ -1,6 +1,6 @@
 ^{:watch-dirs ["ui/srcs" "ui/env"]
   :css-dirs ["ui/resources/public/css"]
-  :ring-server-options {:port 3030}
+  :ring-server-options {:port 8181}
   :reload-clj-files false}
 
 {:main "dev.start"

@@ -49,7 +49,8 @@
                    :justify-content "space-between"
                    :margin-bottom "2px"
                    :box-sizing "border-box"
-                   :border "1px solid grey"
+                   :border "1px solid #374156"
+                   :box-shadow "0px 0px 3px rgba(0,37,255,0.5)"
                    :border-radius "10px"}
       [:.icon-main {:display "flex"}
        [:.icon {:margin-right "15px"}
@@ -86,16 +87,6 @@
              :class "form-control"
              :placeholder "Search..."
              :on-change #(rf/dispatch [::model/patient-search (-> % .-target .-value)])}]]
-   [:div.create
-    {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
-    "New"]])
-
-#_(defn actions []
-  [:div.actions
-   [:div.search
-    [:input.search-form {:type "text"
-                         :placeholder "Search..."
-                         :on-change #(rf/dispatch [::model/patient-search (-> % .-target .-value)])}]]
    [:div.create
     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/patient/create"}])}
     "New"]])

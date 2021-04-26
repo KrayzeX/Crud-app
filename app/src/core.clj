@@ -19,7 +19,7 @@
   (GET "/patient/search" [] crud/patient-list)
   (GET "/patient/:params" [] crud/patient-search)
   (PUT "/patient/new" [] crud/patient-create)
-  (GET "/patient/:id" [id] (crud/patient-read id))
+  (GET "/patient/:id" [] crud/patient-read)
   (DELETE "/patient/:id" [] crud/patient-delete)
   (PUT "/patient/:id" [] crud/patient-update))
 

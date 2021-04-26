@@ -48,9 +48,9 @@
      [:.line-info {:display "flex"
                    :justify-content "space-between"
                    :margin-bottom "2px"
+                   :background-color "#D6E3FC"
                    :box-sizing "border-box"
                    :border "1px solid #374156"
-                   :box-shadow "0px 0px 3px rgba(0,37,255,0.5)"
                    :border-radius "10px"}
       [:.icon-main {:display "flex"}
        [:.icon {:margin-right "15px"}
@@ -67,7 +67,9 @@
                         :color "#666666"}
          [:.birth {:margin-right "15px"}]
          [:.policy-number]]]]
-      [:.delete {:margin-right "25px"}
+      [:.delete {:margin-right "25px"
+                 :background-color "white"
+                 :border-radius "30px"}
        [:&:hover {:cursor "pointer"}]
        [:.delete-icon {:width "30px"
                        :height "30px"
@@ -141,35 +143,41 @@
     [:.edit-action {:display "flex"
                     :border-bottom "2px solid #AEADB2"
                     :justify-content "space-between"
-                    :margin-bottom "20px"}
-     [:.back {:height "30px"
-              :padding "2px 7px"
-              :box-shadow "0 0 5px rgba(0,0,0,0.5)"
+                    :margin "20px 0"}
+     [:.back {:box-sizing "border-box"
+              :box-shadow "0 0 3px rgba(0,37,255,0.5)"
+              :margin-right "15px"
               :font-weight "500"
-              :margin-bottom "15px"
-              :color "black"
               :width "fit-content"
-              :box-sizing "border-box"
-              :border "1px solid grey"}
+              :height "fit-content"
+              :border-radius "8px"
+              :color "#0B162B"
+              :line-height "24px"
+              :padding "3px 7px"
+              :border "1px solid #0B162B"}
       [:&:hover {:cursor "pointer"
-                 :background-color "#c4c4c4"}]]
-     [:.edit {:height "30px"
-              :padding "2px 7px"
+                 :color "white"
+                 :background-color "#5D6F93"}]
+      [:&:active {:background-color "#0B162B"}]]
+     [:.edit {:height "fit-content"
+              :padding "3px 7px"
               :box-shadow "0 0 5px rgba(0,0,0,0.5)"
               :font-weight "500"
+              :border-radius "8px"
               :margin-bottom "15px"
-              :color "white"
-              :background-color "#FFCC73"
+              :margin-right "10px"
+              :color "#FFA200"
               :width "fit-content"
               :box-sizing "border-box"
               :border "1px solid #FFA200"}
       [:&:hover {:cursor "pointer"
-                 :background-color "#Fdd896"}]
-      [:&:active {:background-color "#FFBA40"}]]]
-    [:.card {:box-sizing "border-box"
-             :border-radius "15px"
-             :border "2px solid grey"}
-     [:.patient {:display "flex"}
+                 :color "#FFFFFF"
+                 :background-color "#FDD896"}]
+      [:&:active {:background-color "#FFA200"}]]]
+    [:.card {:border-radius "15px"}
+     [:.patient {:display "flex"
+                 :background-color "#D6E3FC"
+                 :border-radius "15px"}
       [:.photo {:margin "15px 15px 15px 15px"
                 :box-sizing "border-box"
                 :border "2px solid grey"

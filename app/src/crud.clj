@@ -9,9 +9,9 @@
     {:status 200
      :body {:entry data}}))
 
-(defn patient-read [id]
-  (println "Data: " id)
-  (if-let [data (db/query-first ["select * from patient where id = ?" id])]
+(defn patient-read [request]
+  (println request)
+  #_(if-let [data (db/query-first ["select * from patient where id = ?" id])]
     {:status 200
      :body {:entry data}}
     {:status 404

@@ -10,7 +10,7 @@
      :body {:entry data}}))
 
 (defn patient-read [{{:keys [id]} :route-params :as request}]
-  (if-let [data (db/query-first ["select * from patient where id = ?" id])]
+  (if-let [data (db/query-first ["select * from patient where id = ?" (Integer. id)])]
     {:status 200
      :body {:entry data}}
     {:status 404
@@ -100,7 +100,7 @@
                     :resource new-resource}}}))
 
 (defn patient-delete [{{:keys [id]} :route-params :as request}]
-  (let [delete-rows (db/execute ["delete from patient where id = ?" id])]
+  (let [delete-rows (db/execute ["delete from patient where id = ?" (Integer. id)])]
     (if (= 0 delete-rows)
       {:status 404
        :body {:message "Patient with this id hasn't been found"}}

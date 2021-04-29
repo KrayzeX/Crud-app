@@ -1,6 +1,7 @@
 (ns core
   (:require [clojure.string :as str]
             [clojure.pprint :as pp]
+            [org.httpkit.server :as server]
 
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.cors :refer [wrap-cors]]
@@ -55,51 +56,6 @@
       (let [resp (dispatch req)]
         (-> resp (allow req))))))
 
-#_(defroutes app-routes
-  (context "/patient" []
-           (GET "/search" [] cc/patient-list)
-           (GET "/:params" [params :as request] (cc/patient-search request))
-           (PUT "/new" [] cc/patient-create)
-           (context "/:id" [id]
-                    (GET "/" [] cc/patient-read)
-                    (DELETE "/" cc/patient-delete)
-                    (PUT "/" cc/patient-update))))
-
-#_(defroutes app-routes
-  (GET "/patient/search" [] cc/patient-list)
-  (GET "/patient/:id" [id] (cc/patient-read id)))
-
-;; (defn preflight [{req-meth :request-method hs :headers :as request}]
-;;   (do
-;;     (def request request)
-;;     (let [headers (get hs "access-control-request-headers")
-;;           origin (get hs "origin")
-;;           method (get hs "access-control-request-method")]
-;;       {:status 200
-;;        :headers {"Access-Control-Allow-Headers" headers
-;;                  "Access-Control-Allow-Methods" method
-;;                  "Access-Control-Allow-Origin" origin
-;;                  "Access-Control-Allow-Credentials" "true"
-;;                  "Access-Control-Expose-Headers" "Location, Transaction-Meta, Content-Location, Category, Content-Type, X-total-count"}})))
-
-;; (defn allow [response request]
-;;   (def response response)
-;;   (def request request)
-;;   (let [origin (get-in request [:headers "origin"])]
-;;     (def origin origin)
-;;     (update-in response [:headers]
-;;                merge {"Access-Control-Allow-Origin" origin
-;;                       "Access-Control-Allow-Credentials" "true"
-;;                       "Access-Control-Expose-Headers" "Location, Content-Location, Category, Content-Type, X-total-count"})))
-
-;; (defn allow-cors [handler]
-;;   (fn [{req-meth :request-method hs :headers :as request}]
-;;     (if (= :options req-meth)
-;;       (preflight request)
-;;       (let [response (handler request)]
-;;         (-> response
-;;             (allow request))))))
-
 (def app
   (-> dispatch
       mk-handler
@@ -109,6 +65,12 @@
       wrap-reload))
 
 (defn -main [& args]
-  (jetty/run-jetty #'app {:port 8080
+  (server/run-server #'app {:port 8080
                           :join? false})
   (println "WebApp started at port: 8080..."))
+
+(comment
+  (defn -main [& args]
+    (jetty/run-jetty #'app {:port 8080
+                            :join? false})
+    (println "WebApp started at port: 8080...")))

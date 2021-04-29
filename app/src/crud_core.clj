@@ -10,12 +10,15 @@
      :body {:entry data}}))
 
 (defn patient-read [request]
-  (let [user-id (-> request :route-params :id)
-        data (db/query-first ["select * from patient where id = ?" user-id])]
-      {:status 200
-       :body {:entry data}}
-      {:status 404
-       :body {:message "Patient has not been found!"}}))
+  (do
+    (def request request)
+    (let [user-id (-> request :params :id)
+          data (db/query-first ["select * from patient where id = ?" user-id])]
+      (if data
+        {:status 200
+         :body {:entry data}}
+        {:status 404
+         :body {:message "Patient has not been found!"}}))))
 
 (defn patient-search [request]
   (let [params (-> request :params :params)

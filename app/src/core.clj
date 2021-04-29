@@ -21,29 +21,48 @@
            (GET "/:params" [params :as request] (cc/patient-search request))
            (PUT "/new" [] cc/patient-create)
            (context "/:id" [id]
-                    (GET "/" request cc/patient-read)
-                    (DELETE "/" request (cc/patient-delete request))
-                    (PUT "/" request (cc/patient-update request)))))
+                    (GET "/" [] cc/patient-read)
+                    (DELETE "/" [] cc/patient-delete)
+                    (PUT "/" [] cc/patient-update))))
 
-;; (defn allow-access [handler]
-;;   (fn [request]
-;;     (let [response (handler request)]
-;;       (-> response
-;;           (assoc-in [:headers "Access-Control-Allow-Origin"] "*")
-;;           (assoc-in [:headers "Access-Control-Allow-Headers"] "*")
-;;           (assoc-in [:headers "Access-Control-Allow-Methods"] "*")))))
+(defn preflight [{req-meth :request-method hs :headers :as request}]
+  (do
+    (def request request)
+    (let [headers (get hs "access-control-request-headers")
+          origin (get hs "origin")
+          method (get hs "access-control-request-method")]
+      {:status 200
+       :headers {"Access-Control-Allow-Headers" headers
+                 "Access-Control-Allow-Methods" method
+                 "Access-Control-Allow-Origin" origin
+                 "Access-Control-Allow-Credentials" "true"
+                 "Access-Control-Expose-Headers" "Location, Transaction-Meta, Content-Location, Category, Content-Type, X-total-count"}})))
+
+(defn allow [response request]
+  (def response response)
+  (def request request)
+  (let [origin (get-in request [:headers "origin"])]
+    (def origin origin)
+    (update-in response [:headers]
+               merge {"Access-Control-Allow-Origin" origin
+                      "Access-Control-Allow-Credentials" "true"
+                      "Access-Control-Expose-Headers" "Location, Content-Location, Category, Content-Type, X-total-count"})))
+
+(defn allow-cors [handler]
+  (fn [{req-meth :request-method hs :headers :as request}]
+    (if (= :options req-meth)
+      (preflight request)
+      (let [response (handler request)]
+        (-> response
+            (allow request))))))
 
 (def app
   (-> app-routes
-   wrap-json-body
-   wrap-params
-   wrap-json-response
-   wrap-reload
-   (wrap-defaults api-defaults)
-   (wrap-cors
-    :access-control-allow-origin #".*"
-    :access-control-allow-headers #{"*"}
-    :access-control-allow-methods [:get :put :options :delete])))
+      allow-cors
+      wrap-json-body
+      wrap-params
+      wrap-json-response
+      wrap-reload))
 
 (defn -main [& args]
   (jetty/run-jetty #'app {:port 8080

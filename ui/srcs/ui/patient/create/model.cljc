@@ -24,7 +24,7 @@
              (assoc-in [:form-values :birth-date] "")
              (assoc-in [:form-values :gender] "")
              (assoc-in [:form-values :policy-number] "")
-             (assoc-in [:form-values :patient-id] "")
+             (assoc-in [:form-values :patient-id] (rand-int 500))
              (assoc-in [:form-values :country] "")
              (assoc-in [:form-values :city] "")
              (assoc-in [:form-values :street] "")
@@ -39,11 +39,6 @@
  ::set-option
  (fn [{db :db} [_ value]]
    {:db (assoc-in db [:form-values :gender] value)}))
-
-(rf/reg-event-fx
- ::set-id
- (fn [{db :db} [_]]
-   {:db (assoc-in db [:form-values :patient-id] (rand-int 500))}))
 
 (rf/reg-event-fx
  ::create-patient

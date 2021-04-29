@@ -175,7 +175,6 @@
        [:div.action
         [:div.button
          {:on-click (fn []
-                      (rf/dispatch [::model/set-id])
                       (if (empty? (filter #(= "" %) (vals @m)))
                         (rf/dispatch [::model/create-patient])
                         (js/alert "Fields should not be empty!")))}

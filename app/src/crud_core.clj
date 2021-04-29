@@ -1,4 +1,4 @@
-(ns crud
+(ns crud-core
   (:require
    [dbcore :as db]
    [honeysql.core :as hsql]
@@ -10,15 +10,16 @@
      :body {:entry data}}))
 
 (defn patient-read [request]
-  (println request)
-  #_(if-let [data (db/query-first ["select * from patient where id = ?" id])]
-    {:status 200
-     :body {:entry data}}
-    {:status 404
-     :body {:message "Patient has not been found!"}}))
+  (let [user-id (-> request :route-params :id)
+        data (db/query-first ["select * from patient where id = ?" user-id])]
+      {:status 200
+       :body {:entry data}}
+      {:status 404
+       :body {:message "Patient has not been found!"}}))
 
-(defn patient-search [{{:keys [params]} :route-params :as request}]
-  (let [p (map
+(defn patient-search [request]
+  (let [params (-> request :params :params)
+        p (map
            #(str % "%")
            (-> params str/trim (str/split #"%20")))
         data (db/query (hsql/format {:select [:*]
@@ -100,11 +101,13 @@
      :body {:entry {:id id
                     :resource new-resource}}}))
 
-(defn patient-delete [{{:keys [id]} :route-params :as request}]
-  (let [delete-rows (db/execute ["delete from patient where id = ?" id])]
+(defn patient-delete [request]
+  (let [user-id (-> request :params :id)
+        delete-rows (db/execute ["delete from patient where id = ?" user-id])]
     (if (= 0 delete-rows)
       {:status 404
        :body {:message "Patient with this id hasn't been found"}}
       {:status 200
-       :body {:message "ok"}})))
+       :body {:message "Patient successfully removed"}})))
+
 

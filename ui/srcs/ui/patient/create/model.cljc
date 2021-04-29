@@ -41,14 +41,10 @@
    {:db (assoc-in db [:form-values :gender] value)}))
 
 (rf/reg-event-fx
- ::rand-id
- (fn [{db :db} [_]]
-   {:db (assoc-in db [:form-values :patient-id] (rand-int 500))}))
-
-(rf/reg-event-fx
  ::create-patient
  (fn [{db :db} [_]]
-   (let [params-to-request (:form-values db)]
+   (let [rand-id (assoc-in db [:form-values :patient-id] (rand-int 500))
+         params-to-request (:form-values rand-id)]
      {:dispatch [:xhr/fetch {:uri "http://localhost:8080/patient/new"
                              :body params-to-request
                              :method "PUT"

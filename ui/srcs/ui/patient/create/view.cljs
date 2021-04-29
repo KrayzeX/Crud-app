@@ -175,7 +175,6 @@
        [:div.action
         [:div.button
          {:on-click (fn []
-                      (rf/dispatch [::model/rand-id])
                       (cond
                         (empty? (filter #(= "" %) (vals @m)))
                         (rf/dispatch [::model/create-patient])

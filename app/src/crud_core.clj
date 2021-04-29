@@ -9,20 +9,15 @@
     {:status 200
      :body {:entry data}}))
 
-(defn patient-read [request]
-  (do
-    (def request request)
-    (let [user-id (-> request :params :id)
-          data (db/query-first ["select * from patient where id = ?" user-id])]
-      (if data
-        {:status 200
-         :body {:entry data}}
-        {:status 404
-         :body {:message "Patient has not been found!"}}))))
+(defn patient-read [{{:keys [id]} :route-params :as request}]
+  (if-let [data (db/query-first ["select * from patient where id = ?" id])]
+    {:status 200
+     :body {:entry data}}
+    {:status 404
+     :body {:message "Patient has not been found!"}}))
 
-(defn patient-search [request]
-  (let [params (-> request :params :params)
-        p (map
+(defn patient-search [{{:keys [params]} :route-params :as request}]
+  (let [p (map
            #(str % "%")
            (-> params str/trim (str/split #"%20")))
         data (db/query (hsql/format {:select [:*]
@@ -104,9 +99,8 @@
      :body {:entry {:id id
                     :resource new-resource}}}))
 
-(defn patient-delete [request]
-  (let [user-id (-> request :params :id)
-        delete-rows (db/execute ["delete from patient where id = ?" user-id])]
+(defn patient-delete [{{:keys [id]} :route-params :as request}]
+  (let [delete-rows (db/execute ["delete from patient where id = ?" id])]
     (if (= 0 delete-rows)
       {:status 404
        :body {:message "Patient with this id hasn't been found"}}

@@ -175,11 +175,9 @@
        [:div.action
         [:div.button
          {:on-click (fn []
-                      (cond
-                        (empty? (filter #(= "" %) (vals @m)))
+                      (rf/dispatch [::model/set-id])
+                      (if (empty? (filter #(= "" %) (vals @m)))
                         (rf/dispatch [::model/create-patient])
-
-                        :else
                         (js/alert "Fields should not be empty!")))}
          "Create"]
         [:div.cancel-button

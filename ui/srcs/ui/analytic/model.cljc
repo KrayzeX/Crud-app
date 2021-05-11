@@ -1,0 +1,2 @@
+(ns ui.analytic.model)
+

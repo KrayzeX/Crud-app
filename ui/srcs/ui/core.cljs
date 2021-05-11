@@ -13,9 +13,11 @@
    [ui.pages :as pages]
    [ui.routes :as routes]
 
+   [ui.analytic.core]
    [ui.patient.core]
    [ui.patient.edit.view]
-   [ui.patient.create.view]))
+   [ui.patient.create.view]
+   [ui.patient.mapping.core]))
 
 (rf/reg-event-fx
  ::initialize

@@ -8,7 +8,7 @@
    [ui.pages :as pages]
    [ui.styles :as styles]))
 
-(def create-stytle
+(def create-style
   (styles/style
    [:*
     [:.tittle {:font-size "28px"
@@ -165,7 +165,7 @@
 (defn create-page [data]
   (let [m (rf/subscribe [:patient/create])]
     (fn []
-      [:div.page create-stytle
+      [:div.page create-style
        [:div.tittle
         "New patient"]
        [:div.create

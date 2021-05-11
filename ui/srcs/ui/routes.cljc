@@ -10,4 +10,5 @@
               [:pid] {:. :patient/show
                       "edit" {:. :patient/edit}}}
    "analytic" {:. :mapping/analytic}
-   "mapping" {:. :patient/mapping}})
+   "mapping" {:. :mapping/core
+              [:pid] {:. :patient/mapping}}})

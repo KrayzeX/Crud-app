@@ -11,10 +11,9 @@
             [ring.adapter.jetty :as jetty]
 
             [route-map.core :as rm]
-            ;; [compojure.core :refer :all]
-            ;; [compojure.route :as route]
             [dbcore :refer :all]
-            [crud-core :as cc])
+            [crud-core :as cc]
+            [mapping.core :as mc])
   (:gen-class))
 
 (def routes
@@ -23,7 +22,8 @@
               "new" {:PUT cc/patient-create}
               [:id] {:GET cc/patient-read
                      :DELETE cc/patient-delete
-                     :PUT cc/patient-update}}})
+                     :PUT cc/patient-update}}
+   "mapping" {[:id] {:GET mc/update-resource}}})
 
 (defn dispatch [{meth :request-method uri :uri :as req}]
   (if-let [{handler :match params :params} (rm/match [meth uri] #'routes)]
@@ -43,6 +43,7 @@
                "Access-Control-Expose-Headers" "Location, Transaction-Meta, Content-Location, Category, Content-Type, X-total-count"}}))
 
 (defn allow [resp req]
+  (println req)
   (let [origin (get-in req [:headers "origin"])]
     (update resp :headers merge
             {"Access-Control-Allow-Origin" origin

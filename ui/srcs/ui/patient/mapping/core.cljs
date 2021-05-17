@@ -19,6 +19,21 @@
                :font-weight "500"
                :border-bottom "2px solid grey"
                :margin-bottom "20px"}]
+    [:.block-button {:height "fit-content"
+                     :padding "3px 7px"
+                     :margin-bottom "15px"
+                     :background-color "#FFFFFF"
+                     :box-shadow "0 0 3px rgba(0,37,255,0.5)"
+                     :font-weight "500"
+                     :border-radius "8px"
+                     :color "#0B162B"
+                     :width "fit-content"
+                     :box-sizing "border-box"
+                     :border "1px solid #0B162B"}
+     [:&:hover {:cursor "pointer"
+                :background-color "#D6E3FC"}]
+     [:&:active {:background-color "#586E92"
+                 :color "#FFFFFF"}]]
     [:.mapping-block {:border-radius "15px"
                       :background-color "#D6E3FC"
                       :padding "20px"
@@ -51,6 +66,11 @@
                  :background-color "#5D6F93"}]
       [:&:active {:background-color "#0B162B"}]]]]))
 
+(defn button-back [args]
+  [:div.block-button
+   {:on-click #(rf/dispatch [::redirect/redirect {:uri (str "/patient/" (:id args))}])}
+   "Back"])
+
 (defn mapping [{resource :resource :as args}]
   (let [pid (get-in resource [:resource :patient-id])]
     [:div.mapping-block
@@ -73,6 +93,7 @@
       [:div.container style
        [:div.tittle
         "Mapping"]
+       [button-back @m]
        [mapping @m]])))
 
 (pages/reg-page :patient/mapping patient-mapping)

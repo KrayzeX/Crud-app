@@ -25,5 +25,12 @@
 (rf/reg-event-fx
  ::migrate-data
  (fn [{db :db} [_ pid]]
-   {:dispatch [:xhr/fetch {}]}))
+   {:dispatch [:xhr/fetch {:uri (str "http://localhost:8080/mapping/" pid)
+                           :req-id ::mapping-result}]}))
+
+(rf/reg-sub
+ :mapping/result
+ :<- [:xhr/response ::mapping-result]
+ (fn [{data :data}]
+   (:entry data)))
 

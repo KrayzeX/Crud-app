@@ -40,9 +40,10 @@
                 :border "1px solid #0B162B"
                 :border-radius "8px"}
       [:&:hover {:cursor "pointer"
-                 :color "white"
-                 :background-color "#5D6F93"}]
-      [:&:active {:background-color "#0B162B"}]]]
+                 :color "#0B162B"
+                 :background-color "#D6E3FC"}]
+      [:&:active {:background-color "#374156"
+                  :color "white"}]]]
 
     [:.table {:margin-top "30px"}
      [:.line-info {:display "flex"
@@ -139,11 +140,16 @@
 
 (def card-style
   (styles/style
-   [:*
-    [:.edit-action {:display "flex"
+   [:.page
+    [:.card-tittle {:padding "20px 0"
+                    :color "#676B6A"
                     :border-bottom "2px solid #AEADB2"
-                    :justify-content "space-between"
-                    :margin "20px 0"}
+                    :text-align "center"
+                    :font-size "28px"
+                    :font-weight "500"}]
+    [:.edit-action {:display "flex"
+                    :margin-top "20px"
+                    :justify-content "space-between"}
      [:.back {:box-sizing "border-box"
               :box-shadow "0 0 3px rgba(0,37,255,0.5)"
               :margin-right "15px"
@@ -156,29 +162,31 @@
               :padding "3px 7px"
               :border "1px solid #0B162B"}
       [:&:hover {:cursor "pointer"
-                 :color "white"
-                 :background-color "#5D6F93"}]
-      [:&:active {:background-color "#0B162B"}]]
+                 :color "#0B162B"
+                 :background-color "#D6E3FC"}]
+      [:&:active {:background-color "#374156"
+                  :color "#FFFFFF"}]]
      [:.tittle {:color "#676B6A"
                 :text-align "center"
                 :font-size "28px"
                 :font-weight "500"}]
      [:.modifications {:display "flex"}
-      [:.mapping {:height "fit-content"
-                  :padding "3px 7px"
-                  :box-shadow "0 0 3px rgba(0,0,0,0.5)"
-                  :font-weight "500"
-                  :border-radius "8px"
-                  :margin-bottom "15px"
-                  :color "#7049AB"
+      [:.mapping {:box-sizing "border-box"
+                  :box-shadow "0 0 3px rgba(0,37,255,0.5)"
                   :margin-right "15px"
+                  :font-weight "500"
                   :width "fit-content"
-                  :box-sizing "border-box"
-                  :border "1px solid #7049AB"}
+                  :height "fit-content"
+                  :border-radius "8px"
+                  :color "#0B162B"
+                  :line-height "24px"
+                  :padding "3px 7px"
+                  :border "1px solid #0B162B"}
        [:&:hover {:cursor "pointer"
-                  :color "#FFFFFF"
-                  :background-color "#A480D9"}]
-       [:&:active {:background-color "#7049AB"}]]
+                  :color "#0B162B"
+                  :background-color "#D6E3FC"}]
+       [:&:active {:background-color "#374156"
+                   :color "#FFFFFF"}]]
       [:.edit {:height "fit-content"
                :padding "3px 7px"
                :box-shadow "0 0 3px rgba(0,0,0,0.5)"
@@ -214,13 +222,15 @@
       [:.third {:font-size "18px"}]
       [:.fourth {:color "#555555"}]]]]))
 
+(defn card-tittle []
+  [:div.card-tittle
+   "Patient information"])
+
 (defn card-action [args]
   [:div.edit-action
    [:div.back
     {:on-click #(rf/dispatch [::redirect/redirect {:uri "/"}])}
     "To list"]
-   [:div.tittle
-    "Patient infotmation"]
    [:div.modifications
     [:div.mapping
      {:on-click #(rf/dispatch [::redirect/redirect {:uri (str "/mapping/" (:id args))}])}
@@ -262,9 +272,10 @@
 (defn patient-show [data]
   (let [m (rf/subscribe [:patient/show])]
     (fn []
-      [:div.page
+      [:div.page card-style
+       [card-tittle]
        [card-action @m]
-       [:div.card card-style
+       [:div.card
         [patient-card @m]]])))
 
 (pages/reg-page :patient/index patients)

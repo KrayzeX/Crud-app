@@ -47,7 +47,7 @@
                       :font-weight 500}]
       [:.json-block {:width "550px"
                      :margin-bottom "20px"
-                     :min-height "450px"
+                     :min-height "480px"
                      :background-color "#ffffff"}]]
      [:.button {:height "fit-content"
                 :padding "3px 7px"
@@ -71,7 +71,7 @@
    {:on-click #(rf/dispatch [::redirect/redirect {:uri (str "/patient/" (:id args))}])}
    "Back"])
 
-(defn mapping [{resource :resource :as args}]
+(defn mapping [{resource :resource :as args} {new-resource :resource :as args}]
   (let [pid (get-in resource [:resource :patient-id])]
     [:div.mapping-block
      [:div.data-block
@@ -85,15 +85,17 @@
      [:div.data-block
       [:div.block-title
        "New version resource"]
-      [:div.json-block]]]))
+      [:pre.json-block
+       (js/JSON.stringify (clj->js new-resource) nil 2)]]]))
 
 (defn patient-mapping [data]
-  (let [m (rf/subscribe [:patient/mapping])]
+  (let [m (rf/subscribe [:patient/mapping])
+        n (rf/subscribe [:mapping/result])]
     (fn []
       [:div.container style
        [:div.tittle
         "Mapping"]
        [button-back @m]
-       [mapping @m]])))
+       [mapping @m @n]])))
 
 (pages/reg-page :patient/mapping patient-mapping)

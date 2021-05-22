@@ -3,9 +3,9 @@
 (def mapping-map
   {:transformations
    [
-    {:oldPath ["resource" "name" "surname"]
+    {:oldPath [:resource "resource" "name" "surname"]
      :op "move"
-     :newPath ["resource" "name" "family-name"]}
+     :newPath [:resource "resource" "name" "family-name"]}
     {:oldPath []
      :op "add"
-     :newPath ["resource" "contact" "phone-number"]}]})
+     :newPath [:resource "resource" "contact" "phone-number"]}]})
